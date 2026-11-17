@@ -53,7 +53,9 @@ There are two ways. Pick either.
 On Android, open the [live version](https://gustavpharm.github.io/babypaper/) in Chrome and choose "Install app" or "Add to Home screen" from the browser menu. On iPhone, open it in Safari, tap Share, then "Add to Home Screen". A 「宝」 icon appears on your home screen and the app opens full screen. After the first launch the glossary is cached on the phone, so it works without a connection.
 
 **Android APK**
-Download `babypaper-v1.0.0.apk` from this repo's [Releases](../../releases) page and open it on your phone to install. It is a signed release build, so you only need to allow the one-time "unknown source" prompt. You can also build it yourself: find "Build Android APK" on the repo's Actions tab, click Run workflow, and download `babypaper-apk` from the bottom of that run's page when it finishes.
+Download the latest `babypaper-v*.apk` from this repo's [Releases](../../releases/latest) page and open it on your phone to install. It is a signed release build, so you only need to allow the one-time "unknown source" prompt. You can also build it yourself: find "Build Android APK" on the repo's Actions tab, click Run workflow, and download `babypaper-apk` from the bottom of that run's page when it finishes.
+
+To publish a new version, bump the version in `package.json`, write that version's notes in `docs/releases/` (named `v<version>.md`), then run the workflow with "release" ticked.
 
 Once installed as an app, each launch plays an opening animation of under two seconds that writes the character 「宝」 and then opens the interface. Opening the site in a browser tab skips it.
 

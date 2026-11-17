@@ -53,7 +53,9 @@ node tools/build-single.js
 安卓用 Chrome 打开[在线版](https://gustavpharm.github.io/babypaper/)，在浏览器菜单里点「安装应用」或「添加到主屏幕」；iPhone 用 Safari 打开，点分享按钮，再选「添加到主屏幕」。装好后桌面上会多一个「宝」字图标，点开是全屏的。第一次打开后词库会缓存在手机里，之后没网也能用。
 
 **安卓 APK 安装包**
-在本仓库的 [Releases](../../releases) 页下载 `babypaper-v1.0.0.apk`，传到手机上点开安装。安装包带正式签名，系统提示「未知来源」时允许一次即可。也可以自己打包：在仓库的 Actions 页找到「Build Android APK」，点 Run workflow，跑完后在那次运行记录的底部下载 `babypaper-apk`。
+在本仓库的 [Releases](../../releases/latest) 页下载最新的 `babypaper-v*.apk`，传到手机上点开安装。安装包带正式签名，系统提示「未知来源」时允许一次即可。也可以自己打包：在仓库的 Actions 页找到「Build Android APK」，点 Run workflow，跑完后在那次运行记录的底部下载 `babypaper-apk`。
+
+发新版时，先改 `package.json` 里的版本号，再在 `docs/releases/` 下写好这一版的说明（文件名是 `v版本号.md`），然后运行这个工作流并勾选「发布到 Releases」。
 
 装成 app 之后，每次点开会有一段不到两秒的开屏动画，写出一个「宝」字再进入界面。在网页里打开时没有这一段。
 
