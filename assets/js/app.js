@@ -653,10 +653,21 @@
         return keep(s[1], a ? a[1] : "");
       });
   }
-  /* Markdown → 纯文本：去掉标题 / 粗体 / 链接 / 表格等标记，保留段落 */
+  /* Markdown → 纯文本：去掉标题 / 粗体 / 链接 / 表格等标记，保留段落。
+     转换工具（如 OXR）导出的 MD 常带 HTML：<sup>/<sub> 是文献里的上标引用号和化学式下标，
+     先换成私用标记，渲染时再还原成真标签；其余 HTML 标签去掉只留文字，HTML 表格压平成分隔行。 */
   function mdToText(md) {
     return md
       .replace(/```[\s\S]*?```/g, function (m) { return m.replace(/```/g, ""); })
+      .replace(/<sup>([\s\S]*?)<\/sup>/gi, "\uE002$1\uE003")
+      .replace(/<sub>([\s\S]*?)<\/sub>/gi, "\uE004$1\uE005")
+      .replace(/<br\s*\/?>/gi, " ")
+      .replace(/<\/tr\s*>/gi, "\n\n")
+      .replace(/<tr[^>]*>/gi, "")
+      .replace(/<\/t[dh]\s*>/gi, " · ")
+      .replace(/<t[dh][^>]*>/gi, "")
+      .replace(/<\/?table[^>]*>/gi, "\n\n")
+      .replace(/<\/?[a-zA-Z][^>]*>/g, "")
       .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
       .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
       .replace(/^[ \t]*\|?[ \t:|-]+\|[ \t:|-]*$/gm, "")
@@ -682,11 +693,16 @@
     return weak >= 2;
   }
 
+  /* mdToText 把 <sup>/<sub> 换成的私用标记，在文本转义之后还原成真标签 */
+  function restoreMarks(html) {
+    return html.replace(/\uE002/g, "<sup>").replace(/\uE003/g, "</sup>")
+      .replace(/\uE004/g, "<sub>").replace(/\uE005/g, "</sub>");
+  }
   /* 按当前的标词规则把 doc 画进阅读区；「已掌握」变了以后会再调一次 */
   function renderDoc() {
     var count = 0, html = doc.title ? "<h2>" + esc(doc.title) + "</h2>" : "";
     doc.paras.forEach(function (p) {
-      if (p.charAt(0) === H_MARK) { html += "<h3>" + esc(p.slice(1)) + "</h3>"; return; }
+      if (p.charAt(0) === H_MARK) { html += "<h3>" + restoreMarks(esc(p.slice(1))) + "</h3>"; return; }
       if (p.charAt(0) === IMG_MARK) {
         var im = (doc.imgs || [])[parseInt(p.slice(1), 10)];
         if (im) html += '<figure class="doc-fig"><img data-zoom src="' + esc(im.src) + '" alt="' + esc(im.alt) + '">'
@@ -695,7 +711,7 @@
       }
       var r = highlight(p);
       count += r.count;
-      html += "<p>" + r.html + "</p>";
+      html += "<p>" + restoreMarks(r.html) + "</p>";
     });
     passageBody.innerHTML = html + tip(count
       ? "带底色的词可以直接点。其他词划选后点「查这个词」；词库里没有的，会给出最接近的词条。"
