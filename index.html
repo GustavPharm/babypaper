@@ -26,11 +26,108 @@
           var t = localStorage.getItem("lp:theme");
           if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
         } catch (e) {}
+        /* 开屏动画只在「当 app 用」时放：装到主屏幕的 PWA、安卓壳，每次启动一遍；普通网页里不放。
+           地址后面加 ?splash 可以在浏览器里强制预览 */
+        try {
+          var force = /[?&]splash(=|&|$)/.test(location.search);
+          var asApp = !!window.Capacitor || navigator.standalone === true ||
+            (window.matchMedia && matchMedia("(display-mode: standalone), (display-mode: fullscreen), (display-mode: minimal-ui)").matches);
+          if (force || (asApp && !sessionStorage.getItem("lp:splashed"))) document.documentElement.className += " splash-on";
+        } catch (e) {}
       })();
     </script>
     <link rel="stylesheet" href="assets/css/app.css" />
   </head>
   <body>
+    <!-- ============ 开屏动画 ============
+         下面这段标记由 tools/build-icons.js 生成（和图标同一套字形），别手改；动效在 app.css「开屏动画」一节 -->
+    <!-- splash:start -->
+    <div class="splash" id="splash" aria-hidden="true">
+      <div class="splash-mark" style="margin:-4.81em 0 0 -5.05em">
+        <span class="sp sp-roof-l" style="left:0.36em;top:1.5em;width:4.64em;height:2.21em"><i class="sp-roof" style="left:0em;width:9.28em;height:1.68em;border-width:0.96em 1.06em 0;border-radius:1.28em 1.28em 0 0"><b style="left:-1.06em;bottom:-0.53em;width:1.06em;height:1.06em"></b><b style="right:-1.06em;bottom:-0.53em;width:1.06em;height:1.06em"></b></i></span>
+        <span class="sp sp-roof-r" style="left:5em;top:1.5em;width:4.64em;height:2.21em"><i class="sp-roof" style="left:-4.64em;width:9.28em;height:1.68em;border-width:0.96em 1.06em 0;border-radius:1.28em 1.28em 0 0"><b style="left:-1.06em;bottom:-0.53em;width:1.06em;height:1.06em"></b><b style="right:-1.06em;bottom:-0.53em;width:1.06em;height:1.06em"></b></i></span>
+        <span class="sp sp-stub" style="left:4.47em;top:0.3em;width:1.06em;height:2.16em"><i></i></span>
+        <span class="sp sp-h1" style="left:2.32em;top:3.46em;width:5.36em;height:0.96em"><i></i></span>
+        <span class="sp sp-h2" style="left:2.76em;top:5.42em;width:3.74em;height:0.96em"><i></i></span>
+        <span class="sp sp-h3" style="left:0.7em;top:8.08em;width:8.6em;height:0.96em"><i></i></span>
+        <span class="sp sp-v" style="left:4.47em;top:3.46em;width:1.06em;height:5.58em"><i></i></span>
+        <span class="sp-pulse" style="left:7.78em;top:6.75em"></span>
+        <span class="sp-cap" style="left:6.52em;top:6.15em;width:2.52em;height:1.2em;transform:rotate(45deg)"><i><b style="left:0.43em;top:0.2em;width:0.64em;height:0.17em;opacity:.62"></b><b style="left:1.45em;top:0.2em;width:0.64em;height:0.17em;opacity:.34"></b></i></span>
+      </div>
+    </div>
+    <!-- splash:end -->
+    <script>
+      (function () {
+        var root = document.documentElement, el = document.getElementById("splash");
+        if (!el) return;
+        if (!/(^| )splash-on( |$)/.test(root.className)) { el.parentNode.removeChild(el); return; }
+
+        var reduce = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+        var written = false, ready = false, opened = false, done = false;
+
+        /* 开屏期间状态栏跟着变绿，结束后还原 */
+        var metas = [].slice.call(document.querySelectorAll('meta[name="theme-color"]'));
+        var colors = metas.map(function (m) { return m.content; });
+        metas.forEach(function (m) { m.content = "#1F4A3B"; });
+
+        /* 圆形展开靠一个可以插值的自定义属性；老浏览器不支持就退回淡出 */
+        var iris = false;
+        try {
+          CSS.registerProperty({ name: "--sp-hole", syntax: "<length>", inherits: false, initialValue: "0px" });
+          iris = true;
+        } catch (e) {}
+
+        function finish() {
+          if (done) return;
+          done = true;
+          if (el.parentNode) el.parentNode.removeChild(el);
+          root.className = root.className.replace(/(^| )splash-on( |$)/, " ");
+          metas.forEach(function (m, i) { m.content = colors[i]; });
+          try { sessionStorage.setItem("lp:splashed", "1"); } catch (e) {}
+        }
+
+        function open() {
+          if (opened || done) return;
+          opened = true;
+          if (reduce || !el.animate) return finish();
+          var anim;
+          if (iris) {
+            /* 圆心在胶囊正中，半径刚好够到最远的屏幕角 */
+            var box = el.getBoundingClientRect(), cap = el.querySelector(".sp-cap").getBoundingClientRect();
+            var x = cap.left + cap.width / 2 - box.left, y = cap.top + cap.height / 2 - box.top;
+            var r = Math.sqrt(Math.pow(Math.max(x, box.width - x), 2) + Math.pow(Math.max(y, box.height - y), 2)) + 28;
+            el.style.setProperty("--sp-x", x + "px");
+            el.style.setProperty("--sp-y", y + "px");
+            el.className += " is-open is-iris";
+            anim = el.animate([{ "--sp-hole": "0px" }, { "--sp-hole": r + "px" }],
+              { duration: 660, delay: 70, easing: "cubic-bezier(.45, 0, .12, 1)", fill: "forwards" });
+          } else {
+            el.className += " is-open";
+            anim = el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 260, easing: "ease", fill: "forwards" });
+          }
+          anim.onfinish = finish;
+          setTimeout(finish, 1500);
+        }
+
+        /* 字写完、应用也就绪了才打开；两个条件谁后到谁触发 */
+        function go() { if (written && ready) requestAnimationFrame(open); }
+        function wrote() { if (!written) { written = true; go(); } }
+
+        /* 最后一个进场动画是胶囊落下（sp-drop），它结束后再停一小拍 */
+        el.addEventListener("animationend", function (e) {
+          if (e.animationName === "sp-drop") setTimeout(wrote, 110);
+        });
+        requestAnimationFrame(function () { setTimeout(wrote, reduce ? 360 : 2400); });   // 减弱动效时没有进场动画；另作保底
+
+        function appReady() { requestAnimationFrame(function () { requestAnimationFrame(function () { ready = true; go(); }); }); }
+        if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", appReady);
+        else appReady();
+
+        el.addEventListener("pointerdown", wrote);   // 点一下跳过
+        setTimeout(finish, 8000);                    // 无论如何不把人挡在外面
+      })();
+    </script>
+
     <a class="skip-link" href="#main">跳到正文</a>
 
     <!-- ============ 顶栏 ============ -->
