@@ -42,6 +42,16 @@ The result is `dist/宝宝文献.html` (~16 MB, styles, scripts, data and figure
 
 > PDF import and OCR load [pdf.js](https://mozilla.github.io/pdf.js/) and [Tesseract.js](https://github.com/naptha/tesseract.js) from a CDN on demand, so those two steps need a network connection. Everything else works fully offline.
 
+## Install it as a phone app
+
+Two ways — pick either:
+
+**Option 1: PWA (recommended, no file to download)**
+On Android, open the [live site](https://gustavpharm.github.io/babypaper/) in Chrome and choose "Install app" or "Add to Home screen" from the browser menu. On iPhone, open it in Safari, tap Share, then "Add to Home Screen". You get the 「宝」 icon on your home screen, full-screen use, and — after the first open — the glossary is cached on-device and works offline.
+
+**Option 2: Android APK**
+Download `babypaper-v1.0.0.apk` from this repo's [Releases](../../releases) page and open it on your phone to install (it is debug-signed, so allow the one-time "unknown source" prompt). You can also build it yourself: the repo ships a manually triggered GitHub Actions workflow, "Build Android APK" — run it from the Actions tab and download the `babypaper-apk` artifact at the bottom of the run page.
+
 ## Repository layout
 
 ```
