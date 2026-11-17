@@ -2,29 +2,32 @@
 
 [中文](README.md) | **English**
 
-Stuck on a basic concept while reading a paper? Paste the passage in — terms covered by the built-in glossary are highlighted automatically. Click one and you get **the definition, a plain-language explanation, and where the concept sits in the overall logic**.
+When you read pharmacy papers, what usually stops you is a basic concept the authors assume you already know. Paste the passage you are stuck on. Every term the built-in glossary covers gets highlighted, and a click shows its definition, a plain-language explanation, and where it sits in the chain of reasoning.
 
-Pure front-end, zero dependencies, no build step. Your literature is processed entirely in your browser and never uploaded.
+It is a plain web page, with nothing to install and no account to create. Your text is processed in your own browser and is never uploaded.
 
-![Screenshot](docs/screenshot.jpg)
+Live version: <https://gustavpharm.github.io/babypaper/>
 
-## Features
+![Screenshot: a pasted passage on the left with glossary terms highlighted, and the term card for "prodrug" open on the right](docs/screenshot.jpg)
 
-- **Read & look up**: paste text, or import / drag in `.txt`, `.md` or `.pdf` files; scanned PDFs and images can be OCR'd. Glossary terms are highlighted automatically in **both Chinese and English text** (English matching handles plurals and hyphenated variants). Click a highlighted term to look it up; select any other word to look that up instead. Terms you already know can be marked "mastered" and stop being highlighted.
-- **Term cards**: a plain-language one-liner, the textbook definition, why it matters in papers, common misconceptions, its position in the logic chain, a figure, and the source. Extra sections stay collapsed by default.
-- **Local archive**: imported papers are saved automatically in your browser (up to 12). Reopen one from "My Archive" and keep reading — no need to import again.
-- **Red notes**: flip the "✎ Red notes" switch, click anywhere in the text, and type. Your note is inserted into the passage in red type, saved together with the archive, and can be edited or deleted later.
-- **Logic chains**: 9 causal chains that string scattered concepts together (nucleoside prodrugs, how to read an activity table, method validation, …); every link opens the related term.
-- **Glossary**: 623 entries across 17 categories — medicinal chemistry, pharmacology, pharmaceutical analysis, pharmaceutics, pharmacognosy, named reactions, common lab drugs and widely used medicines. Searchable by Chinese name, English name or abbreviation.
-- **Experiment quick reference**: 49 cases, each summarised from one published paper — procedure, quantities, main hazards and a link to the original. They describe what that one paper did; they are not general protocols.
-- **Vocabulary book**: saved locally in the browser; self-test mode included; exportable to Markdown or Anki cards.
-- Dark mode, mobile layout, keyboard friendly (press `/` to search the glossary).
+## What it does
 
-## Usage
+- **Read and look up**: paste text, or import or drag in `.txt`, `.md` or `.pdf` files. Scanned PDFs and images can be run through OCR first. Glossary terms are highlighted in both Chinese and English text (English matching handles plurals and hyphenated spellings), and a click looks one up. Any other word can be looked up by selecting it. Mark a term as "mastered" once you know it and it stops being highlighted.
+- **Term cards**: each card starts with a plain-language one-liner, then gives the textbook definition, why the term matters in papers, common misconceptions, its place in a logic chain, and finally a figure and the source. Extra sections stay collapsed until you open them.
+- **Logic chains**: 9 chains that put scattered concepts in causal order, such as why nucleoside drugs need prodrugs, how to read an activity table, and what to check in a method validation. Every link in a chain opens the matching term.
+- **Glossary**: 623 entries in 19 categories, including medicinal chemistry, pharmacology, pharmaceutical analysis, pharmaceutics, pharmacognosy, named reactions, common lab drugs and widely used medicines. Search by Chinese name, English name or abbreviation.
+- **Local archive**: imported papers are saved in your browser automatically, up to 12 of them. Reopen one from "My Archive" and carry on reading without importing it again.
+- **Red notes**: turn on the "✎ Red notes" switch, click anywhere in the text, and type. The note is inserted into the passage in red, saved with the archive, and can be edited or deleted later.
+- **Experiment quick reference**: 49 cases, each summarised from one published paper, with the procedure, quantities, main hazards and a link to the original. Each describes what that one paper did. They are not general protocols.
+- **Vocabulary book**: kept locally in the browser. You can test yourself with it or export it to Markdown or Anki cards.
 
-**Online**: enable GitHub Pages for the repo (Settings → Pages → Deploy from a branch → `main` / root) and open the resulting URL. A live instance runs at <https://gustavpharm.github.io/babypaper/>.
+It also has a dark mode and a phone layout, and everything works from the keyboard (press `/` to search the glossary).
 
-**Local**: download the repo and open `index.html`, or start the bundled server:
+## How to use it
+
+**Online**: open the [live version](https://gustavpharm.github.io/babypaper/). To host your own copy, enable GitHub Pages for the repo (Settings → Pages → Deploy from a branch → `main` / root).
+
+**Locally**: download the repo and open `index.html`. You can also start the bundled server:
 
 ```bash
 node tools/serve.js
@@ -32,27 +35,31 @@ node tools/serve.js
 
 then open <http://127.0.0.1:8765>.
 
-**Single-file offline build** — one self-contained file you can forward (e.g. via chat apps):
+**As a single file**: to pass the whole tool to someone through a chat app, pack it into one HTML file:
 
 ```bash
 node tools/build-single.js
 ```
 
-The result is `dist/宝宝文献.html` (~16 MB, styles, scripts, data and figures all inlined).
+The result is `dist/宝宝文献.html`, about 17 MB, with the styles, scripts, glossary and figures all inside.
 
-> PDF import and OCR load [pdf.js](https://mozilla.github.io/pdf.js/) and [Tesseract.js](https://github.com/naptha/tesseract.js) from a CDN on demand, so those two steps need a network connection. Everything else works fully offline.
+> PDF import and OCR need a network connection, because the page loads [pdf.js](https://mozilla.github.io/pdf.js/) and [Tesseract.js](https://github.com/naptha/tesseract.js) from a CDN on demand. Everything else works offline.
 
-## Install it as a phone app
+## Put it on your phone
 
-Two ways — pick either:
+There are two ways. Pick either.
 
-**Option 1: PWA (recommended, no file to download)**
-On Android, open the [live site](https://gustavpharm.github.io/babypaper/) in Chrome and choose "Install app" or "Add to Home screen" from the browser menu. On iPhone, open it in Safari, tap Share, then "Add to Home Screen". You get the 「宝」 icon on your home screen, full-screen use, and — after the first open — the glossary is cached on-device and works offline.
+**PWA (recommended, no file to download)**
+On Android, open the [live version](https://gustavpharm.github.io/babypaper/) in Chrome and choose "Install app" or "Add to Home screen" from the browser menu. On iPhone, open it in Safari, tap Share, then "Add to Home Screen". A 「宝」 icon appears on your home screen and the app opens full screen. After the first launch the glossary is cached on the phone, so it works without a connection.
 
-**Option 2: Android APK**
-Download `babypaper-v1.0.0.apk` from this repo's [Releases](../../releases) page and open it on your phone to install (signed release build; allow the one-time unknown-source prompt, since it does not come from an app store). You can also build it yourself: the repo ships a manually triggered GitHub Actions workflow, "Build Android APK" — run it from the Actions tab and download the `babypaper-apk` artifact at the bottom of the run page.
+**Android APK**
+Download `babypaper-v1.0.0.apk` from this repo's [Releases](../../releases) page and open it on your phone to install. It is a signed release build, so you only need to allow the one-time "unknown source" prompt. You can also build it yourself: find "Build Android APK" on the repo's Actions tab, click Run workflow, and download `babypaper-apk` from the bottom of that run's page when it finishes.
+
+Once installed as an app, each launch plays an opening animation of under two seconds that writes the character 「宝」 and then opens the interface. Opening the site in a browser tab skips it.
 
 ## Repository layout
+
+The web app itself is static, with no dependencies and no build step.
 
 ```
 index.html              Page structure and UI copy
@@ -60,6 +67,8 @@ assets/css/app.css      Styles (design tokens at the top of the file)
 assets/js/app.js        All interaction logic
 assets/js/en-terms.js   Derivation rules for English term matching (pure functions, also runs in Node)
 assets/figures/         Term figures (sources and licences in CREDITS.md)
+assets/icons/           Icons for the web page and the PWA
+android-icon-res/       Icons and launch images for the Android package
 data/kb.js              Glossary, one JSON entry per line
 data/chains.js          Logic chains
 data/experiments.js     Experiment quick reference
@@ -69,11 +78,11 @@ docs/                   Glossary revision log and other documents
 
 ## Contributing
 
-The most useful contributions are **content**: new entries, corrected definitions, better sources, and openly licensed figures.
+What the project needs most is content: new entries, corrected definitions, better sources, and openly licensed figures.
 
 ### Adding or editing an entry
 
-Edit `data/kb.js` — one JSON object per line:
+Edit `data/kb.js`. Each line is one JSON object:
 
 ```json
 {"w":"词条名","en":"English name","cat":"药理学","alias":"别名一；别名二","def":"基础定义……","plain":"一句话大白话。","use":"在文献里为什么重要……","trap":"常见误解……","chain":["上游词","词条名","下游词"],"src":"定义出处……"}
@@ -94,18 +103,18 @@ Edit `data/kb.js` — one JSON object per line:
 
 House rules:
 
-1. **Every definition needs a source.** Transcribe the standard wording from textbooks, guidelines or public references — never from memory. If unsure, mark the entry `unverified`.
-2. **Plain text only.** No HTML inside fields; `1. …. 2. ….` in a body field is rendered as a list automatically.
-3. **Figures must be openly licensed** (public domain, CC0, CC BY, CC BY-SA) with author and licence recorded in `credit`. No commercial textbook illustrations.
-4. **The English name drives matching in English papers.** `en` and English aliases are split into phrases matched against the text: `selectivity index (SI)` matches `selectivity index` and its plural; abbreviations need 3+ characters and are case-sensitive. Print the full table to check for false matches (`--single` shows only the riskiest single words):
+1. **Every definition needs a source.** Follow the standard wording in textbooks, guidelines or public references, and do not write from memory. If you are unsure, mark the entry `unverified`.
+2. **Plain text only.** Do not put HTML in the fields. `1. …. 2. ….` in a body field is rendered as a list automatically.
+3. **Figures must be openly licensed** (public domain, CC0, CC BY, CC BY-SA), with the author and licence recorded in `credit`. Illustrations from commercial textbooks are not accepted.
+4. **The English name decides whether a term is found in English papers.** `en` and the English aliases are split into phrases and matched against the text, so `selectivity index (SI)` matches `selectivity index` and its plural. Abbreviations need at least 3 characters and are case-sensitive. After editing, print the full matching table to look for false matches; `--single` shows only the riskiest single words:
 
 ```bash
 node tools/list-en-terms.js --single
 ```
 
-   Common words that should never be highlighted on their own (e.g. assay, target) and collision-prone abbreviations (e.g. BET, PSA) go into the stop table at the top of `assets/js/en-terms.js`.
+   Common words that should not be highlighted on their own (such as assay or target) and abbreviations that collide easily (such as BET or PSA) go into the stop table at the top of `assets/js/en-terms.js`.
 
-5. Run the self-check before submitting; after adding or removing figures, regenerate figure sizes and the credits list:
+5. Run the self-check before submitting. If you added or removed figures, also regenerate the figure sizes and the credits list:
 
 ```bash
 node tools/check-data.js
@@ -115,30 +124,30 @@ node tools/build-credits.js
 
 ### Editing the UI
 
-No build step: edit `index.html`, `assets/css/app.css`, `assets/js/app.js` and refresh. Design tokens (colours, fonts, radii) live at the top of `app.css`, with a matching set for dark mode.
+Edit `index.html`, `assets/css/app.css` and `assets/js/app.js`, then refresh the page. Design tokens such as colours, fonts and radii sit at the top of `app.css`, with a matching set for dark mode.
 
-After publishing your fork, set `CONFIG.repoUrl` at the top of `assets/js/app.js` to your repository URL and a GitHub link appears in the header.
+After deploying your own copy, set `CONFIG.repoUrl` at the top of `assets/js/app.js` to your repository URL and a GitHub link appears in the header.
 
-The icons (home-screen icon, Android adaptive icon, favicon) are drawn by `tools/build-icons.js`; the glyph geometry and colours sit at the top of the script. Run `node tools/build-icons.js` to re-export every size.
+The icons (home-screen icon, Android adaptive icon, favicon) are drawn by `tools/build-icons.js`, and the glyph geometry and colours are defined at the top of that script. Run `node tools/build-icons.js` after a change to re-export every size.
 
-When installed as an app, each launch plays a short opening animation: 「宝」 is written stroke by stroke, the capsule drops in, then the screen opens in a circle from the capsule (regular browser tabs skip it). It shares the icon's geometry, so its markup is generated by the same script; the motion lives in the "开屏动画" section of `app.css`. Append `?splash` to the URL to preview it in a browser.
+The opening animation uses the same glyph as the icon, so the same script generates its markup in the page. The motion is in the "开屏动画" section of `app.css`. Append `?splash` to the URL to preview it in a browser.
 
 ## Sources and disclaimer
 
-- Definitions are transcribed from textbooks, ICH / pharmacopoeia guidelines and public references; every entry cites its source at the bottom of its card, and the app's "About" page collects them. The one-liners and "why it matters" notes are plain-language paraphrases. **For formal citation, always go back to the textbook or the original paper.**
+- Definitions follow textbooks, ICH and pharmacopoeia guidelines, and public references. Every entry cites its source at the bottom of its card, and the app's "About" page lists them together. The one-liners and "why it matters" notes are plain-language paraphrases. **For formal citation, go back to the textbook or the original paper.**
 - Named-reaction entries mainly follow the corresponding Wikipedia articles and the LibreTexts open textbooks.
-- Each experiment case describes one paper's procedure only — not a general protocol. The five scores are the editor's subjective impression with no unified rubric. Before doing any of it, read the original paper, check the reagents' SDS, and follow your lab's safety rules.
-- Some sources still cite older textbook editions or the Chinese Pharmacopoeia 2020; they have not all been rechecked against the newest editions.
-- This project is for study and discussion. It is not medical or clinical advice.
-- The glossary's batch revision and correction log is in [docs/词库修订记录.md](docs/词库修订记录.md) (Chinese).
+- Each experiment case describes one paper's procedure only and is not a general protocol. The five scores are the editor's subjective impression, with no shared rubric behind them. Before doing any of it, read the original paper, check the reagents' SDS, and follow your lab's safety rules.
+- Some sources still cite older textbook editions or the Chinese Pharmacopoeia 2020 and have not been rechecked against newer editions.
+- This project is for study and discussion only. It is not medical or clinical advice.
+- The log of batch revisions and corrections to the glossary is in [docs/词库修订记录.md](docs/词库修订记录.md) (in Chinese).
 
 ## Figures
 
-Images in `assets/figures/` come from PubChem (public domain) and Wikimedia Commons / OpenStax (public domain, CC0, CC BY, CC BY-SA). Copyright stays with the original authors; per-image author, licence and source links are in [CREDITS.md](CREDITS.md).
+Images in `assets/figures/` come from PubChem (public domain) and from Wikimedia Commons and OpenStax (public domain, CC0, CC BY, CC BY-SA). Copyright stays with the original authors. The author, licence and source link for each image are in [CREDITS.md](CREDITS.md).
 
 ## Acknowledgements
 
-The layout and interaction patterns were inspired by the open-source projects Modureader, Yomitan, Skola, Elementro and Avogadro (design patterns only — no code or assets were used). PDF text extraction uses Mozilla's pdf.js; OCR uses Tesseract.js.
+The layout and interaction patterns were inspired by the open-source projects Modureader, Yomitan, Skola, Elementro and Avogadro. Only design patterns were borrowed; none of their code or assets are used. PDF text extraction uses Mozilla's pdf.js, and OCR uses Tesseract.js.
 
 ## Licence
 
@@ -150,6 +159,6 @@ The repository is licensed in three parts:
 | Content: the glossary, chains and experiment reference in `data/`, plus `docs/` and this file | [CC BY-SA 4.0](LICENSE-CONTENT.md) |
 | Figures: `assets/figures/` | Each keeps its original licence, see [CREDITS.md](CREDITS.md) |
 
-In short: use the code freely and keep the copyright notice; reuse and adapt the content with attribution, and share adaptations under CC BY-SA 4.0; use each figure under its own licence.
+In short: use the code freely and keep the copyright notice. The content can be reused and adapted with attribution, and adaptations must also be released under CC BY-SA 4.0. Use each figure under its own licence.
 
-The single-file build produced by `tools/build-single.js` contains all three parts, so all three licences apply when forwarding or redistributing it.
+The single-file build produced by `tools/build-single.js` contains all three parts, so all three licences apply when you forward or redistribute it.
