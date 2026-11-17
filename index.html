@@ -11,6 +11,13 @@
     <meta name="theme-color" content="#FAF9F6" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#10110F" media="(prefers-color-scheme: dark)" />
     <title>宝宝文献 · 药学版</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <meta name="theme-color" content="#1F4A3B" />
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="宝宝文献" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7.5' fill='%231F4A3B'/%3E%3Crect x='3.25' y='3.25' width='25.5' height='25.5' rx='4.75' fill='none' stroke='%23fff' stroke-opacity='.34'/%3E%3Ctext x='16' y='22.6' text-anchor='middle' font-size='18' font-weight='700' font-family='Songti SC,STSong,Noto Serif CJK SC,SimSun,serif' fill='%23fff'%3E%E5%AE%9D%3C/text%3E%3C/svg%3E" />
     <!-- 主题要在首屏绘制前定下来，避免深色模式下先闪一下浅色 -->
     <script>
@@ -295,7 +302,7 @@
 
           <section class="about-card">
             <h2>隐私</h2>
-            <p>这是一个纯前端页面，没有账号，也没有后台。你粘贴或导入的文献只留在当前页面里，关闭即清除；生词本和阅读偏好保存在这台设备的浏览器中。</p>
+            <p>这是一个纯前端页面，没有账号，也没有后台。你粘贴或导入的文献只保存在这台设备的浏览器里（见「我的存档」），不会上传；生词本和阅读偏好也一样。</p>
             <p>只有两种情况会联网：导入 PDF 时加载 pdf.js，使用 OCR 时加载 Tesseract.js 和语言包。它们都在本机处理文件，不会把内容传出去。</p>
           </section>
 
@@ -360,5 +367,13 @@
     <script src="data/experiments.js"></script>
     <script src="assets/js/en-terms.js"></script>
     <script src="assets/js/app.js"></script>
+    <script>
+      /* PWA：注册 Service Worker（file:// 打开时跳过，失败不影响使用） */
+      if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("sw.js").catch(function () {});
+        });
+      }
+    </script>
   </body>
 </html>
