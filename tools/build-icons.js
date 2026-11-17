@@ -1,19 +1,19 @@
 #!/usr/bin/env node
-/* 生成全套应用图标：PWA（assets/icons/）和安卓自适应图标（android-icon-res/）。
-   node tools/build-icons.js
+/* 生成全套应用图标：PWA（assets/icons/）和安卓自适应图标（android-icon-res/），
+   并把 index.html 里内联的同款标志（favicon、顶栏 .brand-mark、开屏动画的字）一起更新。
+   node tools/build-icons.js            全部重出
+   node tools/build-icons.js --inline   只更新 index.html 和原生启动图，不出图标 PNG（不需要 playwright）
 
    图标是手绘的「宝」：等线圆头的笔画，「玉」里那一点画成一粒荧光黄胶囊
    （宝宝 + 药学 + 高亮色）。字形全部由下面的几何参数算出来，不依赖任何字体，
    所以改粗细、间距、配色都在这个文件里改，然后重新跑一遍。
 
    栅格化用 playwright 自带的 Chromium。playwright 没有写进 package.json
-   （安卓打包的 CI 用不着它），本机没有的话先：npm i --no-save playwright && npx playwright install chromium
-
-   页面里还有两处内联的同款标志（index.html 的 favicon 和顶栏 .brand-mark），
-   改了字形要一起换：node tools/build-icons.js --inline 会把这两段打印出来，贴回去即可。 */
+   （安卓打包的 CI 用不着它），本机没有的话先：npm i --no-save playwright && npx playwright install chromium */
 "use strict";
 const fs = require("fs");
 const path = require("path");
+const zlib = require("zlib");
 const { ROOT } = require("./lib");
 
 /* ---------- 字形：画在 1000×1000 的字框里，y 轴向下 ---------- */
@@ -74,6 +74,7 @@ const C = {
   capLight: ["#FCE9A0", "#F6D568"],            // 胶囊浅色半边（荧光笔黄）
   capDeep: ["#F0BF45", "#E2A22B"],             // 胶囊深色半边
   shadow: "#06170F",
+  splash: "#1F4A3B",                           // 启动时的平涂底色：原生启动图、WebView 底色、开屏动画起始帧都用它
 };
 
 /* ---------- 画面：设计都在 512×512 的「可见画框」里做 ---------- */
@@ -168,6 +169,28 @@ function jobs() {
   return list;
 }
 
+/* 安卓壳的原生启动图：Capacitor 模板自带的是白底蓝标，这里按模板的文件名逐个盖掉，换成平涂的品牌绿。
+   平涂色怎么拉伸都不变形，所以每张只有 16×16；图案交给网页里的开屏动画去画 */
+const NATIVE_SPLASH = ["drawable"].concat(
+  ["land", "port"].reduce((all, o) => all.concat(Object.keys(DENSITIES).map((d) => "drawable-" + o + "-" + d)), [])
+);
+
+function flatPng(size, hex) {
+  const rgb = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  const row = Buffer.concat([Buffer.from([0])].concat(Array.from({ length: size }, () => Buffer.from(rgb))));
+  const raw = Buffer.concat(Array.from({ length: size }, () => row));
+  const crcTable = Array.from({ length: 256 }, (_, i) => { let c = i; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; return c >>> 0; });
+  const crc = (buf) => { let c = 0xffffffff; for (const x of buf) c = crcTable[(c ^ x) & 255] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0; };
+  const chunk = (type, data) => {
+    const body = Buffer.concat([Buffer.from(type), data]), len = Buffer.alloc(4), sum = Buffer.alloc(4);
+    len.writeUInt32BE(data.length); sum.writeUInt32BE(crc(body));
+    return Buffer.concat([len, body, sum]);
+  };
+  const head = Buffer.alloc(13);
+  head.writeUInt32BE(size, 0); head.writeUInt32BE(size, 4); head[8] = 8; head[9] = 2;   // 8 位 RGB
+  return Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), chunk("IHDR", head), chunk("IDAT", zlib.deflateSync(raw)), chunk("IEND", Buffer.alloc(0))]);
+}
+
 /* index.html 里内联的两处小标志（顶栏 .brand-mark 和 favicon）：只有十几到二十几像素，
    用平涂的字和胶囊，字比大图标里放大一档，小尺寸下笔画才够粗 */
 function inlineMarks() {
@@ -183,10 +206,58 @@ function inlineMarks() {
   return { brand, favicon };
 }
 
+/* 开屏动画里的字：同一套几何，拆成一组可以各自动起来的 HTML 元素。
+   单位是 em，1em = 字框的 1/10（样式里按屏幕大小定 font-size）。动效在 assets/css/app.css 的「开屏动画」一节 */
+function splashMarkup(indent) {
+  const g = G, c = g.cap, hv = g.wv / 2, hh = g.wh / 2, e = (v) => n(v / 100) + "em";
+  const at = (x1, y1, x2, y2) => "left:" + e(x1) + ";top:" + e(y1) + ";width:" + e(x2 - x1) + ";height:" + e(y2 - y1);
+  const stroke = (cls, x1, y1, x2, y2, inner) => '<span class="sp ' + cls + '" style="' + at(x1, y1, x2, y2) + '">' + (inner || "<i></i>") + "</span>";
+  const capEnd = (side) => '<b style="' + side + ":" + e(-g.wv) + ";bottom:" + e(-hv) + ";width:" + e(g.wv) + ";height:" + e(g.wv) + '"></b>';
+  const roof = (left) => '<i class="sp-roof" style="left:' + e(left) + ";width:" + e(g.roofR - g.roofL) + ";height:" + e(g.roofLegY - g.roofTop) +
+    ";border-width:" + e(g.wh) + " " + e(g.wv) + " 0;border-radius:" + e(g.roofOuterR) + " " + e(g.roofOuterR) + ' 0 0">' + capEnd("left") + capEnd("right") + "</i>";
+  const glintW = c.len / 2 - c.w * 0.52, glint = (x, o) => '<b style="left:' + e(x) + ";top:" + e(c.w * 0.17) + ";width:" + e(glintW) + ";height:" + e(c.w * 0.14) + ";opacity:" + o + '"></b>';
+  const rows = [
+    stroke("sp-roof-l", g.roofL, g.roofTop, 500, g.roofLegY + hv, roof(0)),
+    stroke("sp-roof-r", 500, g.roofTop, g.roofR, g.roofLegY + hv, roof(g.roofL - 500)),
+    stroke("sp-stub", 500 - hv, g.stubTop, 500 + hv, g.roofTop + g.wh),
+    stroke("sp-h1", g.h1L, g.h1 - hh, g.h1R, g.h1 + hh),
+    stroke("sp-h2", g.h2L, g.h2 - hh, g.h2R, g.h2 + hh),
+    stroke("sp-h3", g.h3L, g.h3 - hh, g.h3R, g.h3 + hh),
+    stroke("sp-v", 500 - hv, g.h1 - hh, 500 + hv, g.h3 + hh),
+    '<span class="sp-pulse" style="left:' + e(c.cx) + ";top:" + e(c.cy) + '"></span>',
+    '<span class="sp-cap" style="' + at(c.cx - c.len / 2, c.cy - c.w / 2, c.cx + c.len / 2, c.cy + c.w / 2) + ";transform:rotate(" + c.ang + 'deg)"><i>' +
+      glint(c.w * 0.36, ".62") + glint(c.len / 2 + c.w * 0.16, ".34") + "</i></span>",
+  ];
+  const pad = indent + "    ";
+  return indent + '<div class="splash" id="splash" aria-hidden="true">\n' +
+    indent + '  <div class="splash-mark" style="margin:' + e(-g.anchorY) + " 0 0 " + e(-g.anchorX) + '">\n' +
+    rows.map((r) => pad + r + "\n").join("") + indent + "  </div>\n" + indent + "</div>\n";
+}
+
+/* 把 index.html 里的三处内联标志换成当前几何算出来的版本 */
+function updateIndexHtml() {
+  const file = path.join(ROOT, "index.html"), m = inlineMarks();
+  let html = fs.readFileSync(file, "utf8");
+  const swap = (label, re, text) => {
+    if (!re.test(html)) throw new Error("index.html 里找不到" + label);
+    html = html.replace(re, () => text);
+  };
+  swap("顶栏标志", /<svg class="brand-mark"[\s\S]*?<\/svg>/, m.brand);
+  swap(" favicon", /<link rel="icon" href="data:image\/svg\+xml,[^"]*" \/>/, m.favicon);
+  const block = /([ \t]*)<!-- splash:start -->\n[\s\S]*?<!-- splash:end -->/, found = html.match(block);
+  if (!found) throw new Error("index.html 里找不到开屏动画的标记（splash:start / splash:end）");
+  html = html.replace(block, () => found[1] + "<!-- splash:start -->\n" + splashMarkup(found[1]) + found[1] + "<!-- splash:end -->");
+  fs.writeFileSync(file, html);
+}
+
 async function main() {
+  updateIndexHtml();
+  NATIVE_SPLASH.forEach((dir) => {
+    fs.mkdirSync(path.join(ROOT, "android-icon-res", dir), { recursive: true });
+    fs.writeFileSync(path.join(ROOT, "android-icon-res", dir, "splash.png"), flatPng(16, C.splash));
+  });
   if (process.argv.includes("--inline")) {
-    const m = inlineMarks();
-    console.log("顶栏 .brand-mark：\n" + m.brand + "\n\nfavicon：\n" + m.favicon);
+    console.log("已更新 index.html 里的 favicon、顶栏标志和开屏动画的字");
     return;
   }
   let chromium;
@@ -207,8 +278,8 @@ async function main() {
     await page.screenshot({ path: out, omitBackground: true, clip: { x: 0, y: 0, width: j.px, height: j.px } });
   }
   await browser.close();
-  console.log("已生成 assets/icons/icon.svg 和 " + list.length + " 张 PNG");
+  console.log("已生成 assets/icons/icon.svg、" + list.length + " 张图标 PNG、" + NATIVE_SPLASH.length + " 张原生启动图，并更新了 index.html");
 }
 
 if (require.main === module) main().catch((e) => { console.error(e); process.exit(1); });
-module.exports = { VARIANTS, inlineMarks };
+module.exports = { VARIANTS, inlineMarks, splashMarkup };
