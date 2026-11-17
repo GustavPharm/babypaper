@@ -385,6 +385,10 @@ body.dragging .passage { outline: 2px dashed var(--accent); outline-offset: 5px;
   font-family: var(--read-font); font-size: var(--read-size); line-height: var(--read-lh);
   margin-bottom: 1em; overflow-wrap: break-word;
 }
+.passage-body .doc-fig { margin: 1.4em 0; text-align: center; }
+.passage-body .doc-fig img { max-width: 100%; height: auto; background: #fff; border: 1px solid var(--line); border-radius: 8px; }
+.passage-body .doc-fig figcaption { margin-top: 7px; color: var(--ink-3); font-family: var(--font-ui); font-size: 12.5px; letter-spacing: .03em; }
+.passage-body .doc-fig.fig-broken { padding: 12px 14px; border: 1px dashed var(--line); border-radius: 8px; }
 .passage-body .passage-tip {
   margin: 30px 0 0; padding: 16px 0 0; border-top: 1px solid var(--line); color: var(--ink-3);
   font-family: var(--font-ui); font-size: 12.5px; letter-spacing: .03em; line-height: 1.7;

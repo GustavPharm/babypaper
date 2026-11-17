@@ -6,7 +6,7 @@
 标注为 CC BY-SA 的图片，再分发或改编时须保留署名并沿用相同许可证。
 PubChem 结构式由美国国家生物技术信息中心（NCBI）提供，属公共领域。
 
-共 121 张图。
+共 186 张图。
 
 | 文件 | 作者与许可证 | 来源 | 用于词条 |
 | --- | --- | --- | --- |
@@ -80,34 +80,99 @@ PubChem 结构式由美国国家生物技术信息中心（NCBI）提供，属�
 | [`pubchem-cid-1044.png`](assets/figures/pubchem-cid-1044.png) | 结构图：PubChem CID 1044（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/1044) | 嘌呤 |
 | [`pubchem-cid-1135.png`](assets/figures/pubchem-cid-1135.png) | 结构图：PubChem CID 1135（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/1135) | 胸腺嘧啶 |
 | [`pubchem-cid-1174.png`](assets/figures/pubchem-cid-1174.png) | 结构图：PubChem CID 1174（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/1174) | 尿嘧啶 |
-| [`pubchem-cid-121304016.png`](assets/figures/pubchem-cid-121304016.png) | 结构图：PubChem CID 121304016（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/121304016) | 延迟链终止 |
-| [`pubchem-cid-135398513.png`](assets/figures/pubchem-cid-135398513.png) | 结构图：PubChem CID 135398513（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/135398513) | 核苷类似物 |
+| [`pubchem-cid-121304016.png`](assets/figures/pubchem-cid-121304016.png) | 结构图：PubChem CID 121304016（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/121304016) | 延迟链终止、瑞德西韦 |
+| [`pubchem-cid-124081896.png`](assets/figures/pubchem-cid-124081896.png) | 结构图：PubChem CID 124081896（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/124081896) | 巴洛沙韦玛波西酯 |
+| [`pubchem-cid-126941.png`](assets/figures/pubchem-cid-126941.png) | 结构图：PubChem CID 126941（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/126941) | 甲氨蝶呤 |
+| [`pubchem-cid-135398513.png`](assets/figures/pubchem-cid-135398513.png) | 结构图：PubChem CID 135398513（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/135398513) | 核苷类似物、阿昔洛韦 |
+| [`pubchem-cid-135398735.png`](assets/figures/pubchem-cid-135398735.png) | 结构图：PubChem CID 135398735（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/135398735) | 利福平 |
 | [`pubchem-cid-135398739.png`](assets/figures/pubchem-cid-135398739.png) | 结构图：PubChem CID 135398739（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/135398739) | 链终止剂 |
-| [`pubchem-cid-135398740.png`](assets/figures/pubchem-cid-135398740.png) | 结构图：PubChem CID 135398740（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/135398740) | 交叉耐药 |
+| [`pubchem-cid-135398740.png`](assets/figures/pubchem-cid-135398740.png) | 结构图：PubChem CID 135398740（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/135398740) | 交叉耐药、更昔洛韦 |
 | [`pubchem-cid-135398748.png`](assets/figures/pubchem-cid-135398748.png) | 结构图：PubChem CID 135398748（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/135398748) | 核苷类似物 |
 | [`pubchem-cid-13712.png`](assets/figures/pubchem-cid-13712.png) | 结构图：PubChem CID 13712（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/13712) | 脱氧尿苷 |
-| [`pubchem-cid-18283.png`](assets/figures/pubchem-cid-18283.png) | 结构图：PubChem CID 18283（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/18283) | 链终止剂 |
-| [`pubchem-cid-1983.png`](assets/figures/pubchem-cid-1983.png) | 结构图：PubChem CID 1983（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/1983) | 毒性基团 / 结构警示 |
+| [`pubchem-cid-149096.png`](assets/figures/pubchem-cid-149096.png) | 结构图：PubChem CID 149096（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/149096) | 左氧氟沙星 |
+| [`pubchem-cid-14969.png`](assets/figures/pubchem-cid-14969.png) | 结构图：PubChem CID 14969（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/14969) | 万古霉素 |
+| [`pubchem-cid-18283.png`](assets/figures/pubchem-cid-18283.png) | 结构图：PubChem CID 18283（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/18283) | 链终止剂、司他夫定 |
+| [`pubchem-cid-1983.png`](assets/figures/pubchem-cid-1983.png) | 结构图：PubChem CID 1983（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/1983) | 毒性基团 / 结构警示、对乙酰氨基酚 |
+| [`pubchem-cid-2083.png`](assets/figures/pubchem-cid-2083.png) | 结构图：PubChem CID 2083（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/2083) | 沙丁胺醇 |
+| [`pubchem-cid-2162.png`](assets/figures/pubchem-cid-2162.png) | 结构图：PubChem CID 2162（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/2162) | 氨氯地平 |
+| [`pubchem-cid-2244.png`](assets/figures/pubchem-cid-2244.png) | 结构图：PubChem CID 2244（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/2244) | 阿司匹林 |
 | [`pubchem-cid-24066.png`](assets/figures/pubchem-cid-24066.png) | 结构图：PubChem CID 24066（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/24066) | 链终止剂 |
 | [`pubchem-cid-241.png`](assets/figures/pubchem-cid-241.png) | 结构图：PubChem CID 241（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/241) | 骨架 / 母核 |
-| [`pubchem-cid-35370.png`](assets/figures/pubchem-cid-35370.png) | 结构图：PubChem CID 35370（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/35370) | 链终止剂 |
+| [`pubchem-cid-24360.png`](assets/figures/pubchem-cid-24360.png) | 结构图：PubChem CID 24360（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/24360) | 喜树碱 |
+| [`pubchem-cid-2554.png`](assets/figures/pubchem-cid-2554.png) | 结构图：PubChem CID 2554（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/2554) | 卡马西平 |
+| [`pubchem-cid-2662.png`](assets/figures/pubchem-cid-2662.png) | 结构图：PubChem CID 2662（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/2662) | 塞来昔布 |
+| [`pubchem-cid-2719.png`](assets/figures/pubchem-cid-2719.png) | 结构图：PubChem CID 2719（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/2719) | 氯喹 |
+| [`pubchem-cid-2724385.png`](assets/figures/pubchem-cid-2724385.png) | 结构图：PubChem CID 2724385（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/2724385) | 地高辛 |
+| [`pubchem-cid-2726.png`](assets/figures/pubchem-cid-2726.png) | 结构图：PubChem CID 2726（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/2726) | 氯丙嗪 |
+| [`pubchem-cid-2907.png`](assets/figures/pubchem-cid-2907.png) | 结构图：PubChem CID 2907（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/2907) | 环磷酰胺 |
+| [`pubchem-cid-3016.png`](assets/figures/pubchem-cid-3016.png) | 结构图：PubChem CID 3016（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/3016) | 地西泮 |
+| [`pubchem-cid-3121.png`](assets/figures/pubchem-cid-3121.png) | 结构图：PubChem CID 3121（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/3121) | 丙戊酸 |
+| [`pubchem-cid-31703.png`](assets/figures/pubchem-cid-31703.png) | 结构图：PubChem CID 31703（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/31703) | 多柔比星 |
+| [`pubchem-cid-33613.png`](assets/figures/pubchem-cid-33613.png) | 结构图：PubChem CID 33613（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/33613) | 阿莫西林 |
+| [`pubchem-cid-3365.png`](assets/figures/pubchem-cid-3365.png) | 结构图：PubChem CID 3365（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/3365) | 氟康唑 |
+| [`pubchem-cid-3385.png`](assets/figures/pubchem-cid-3385.png) | 结构图：PubChem CID 3385（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/3385) | 氟尿嘧啶 |
+| [`pubchem-cid-3386.png`](assets/figures/pubchem-cid-3386.png) | 结构图：PubChem CID 3386（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/3386) | 氟西汀 |
+| [`pubchem-cid-3440.png`](assets/figures/pubchem-cid-3440.png) | 结构图：PubChem CID 3440（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/3440) | 呋塞米 |
+| [`pubchem-cid-3488.png`](assets/figures/pubchem-cid-3488.png) | 结构图：PubChem CID 3488（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/3488) | 格列本脲 |
+| [`pubchem-cid-35370.png`](assets/figures/pubchem-cid-35370.png) | 结构图：PubChem CID 35370（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/35370) | 链终止剂、齐多夫定 |
+| [`pubchem-cid-36314.png`](assets/figures/pubchem-cid-36314.png) | 结构图：PubChem CID 36314（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/36314) | 紫杉醇 |
+| [`pubchem-cid-36462.png`](assets/figures/pubchem-cid-36462.png) | 结构图：PubChem CID 36462（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/36462) | 依托泊苷 |
+| [`pubchem-cid-3672.png`](assets/figures/pubchem-cid-3672.png) | 结构图：PubChem CID 3672（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/3672) | 布洛芬 |
+| [`pubchem-cid-37542.png`](assets/figures/pubchem-cid-37542.png) | 结构图：PubChem CID 37542（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/37542) | 利巴韦林 |
+| [`pubchem-cid-3767.png`](assets/figures/pubchem-cid-3767.png) | 结构图：PubChem CID 3767（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/3767) | 异烟肼 |
+| [`pubchem-cid-3957.png`](assets/figures/pubchem-cid-3957.png) | 结构图：PubChem CID 3957（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/3957) | 氯雷他定 |
+| [`pubchem-cid-4091.png`](assets/figures/pubchem-cid-4091.png) | 结构图：PubChem CID 4091（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/4091) | 二甲双胍 |
+| [`pubchem-cid-4171.png`](assets/figures/pubchem-cid-4171.png) | 结构图：PubChem CID 4171（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/4171) | 美托洛尔 |
+| [`pubchem-cid-4173.png`](assets/figures/pubchem-cid-4173.png) | 结构图：PubChem CID 4173（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/4173) | 甲硝唑 |
+| [`pubchem-cid-4369359.png`](assets/figures/pubchem-cid-4369359.png) | 结构图：PubChem CID 4369359（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/4369359) | 西格列汀 |
+| [`pubchem-cid-439530.png`](assets/figures/pubchem-cid-439530.png) | 结构图：PubChem CID 439530（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/439530) | 嘌呤霉素 |
+| [`pubchem-cid-441130.png`](assets/figures/pubchem-cid-441130.png) | 结构图：PubChem CID 441130（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/441130) | 美罗培南 |
+| [`pubchem-cid-44259.png`](assets/figures/pubchem-cid-44259.png) | 结构图：PubChem CID 44259（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/44259) | 星形孢菌素 |
 | [`pubchem-cid-44468216.png`](assets/figures/pubchem-cid-44468216.png) | 结构图：PubChem CID 44468216（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/44468216) | 延迟链终止 |
-| [`pubchem-cid-45375808.png`](assets/figures/pubchem-cid-45375808.png) | 结构图：PubChem CID 45375808（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/45375808) | 酯酶水解与前药活化 |
-| [`pubchem-cid-464205.png`](assets/figures/pubchem-cid-464205.png) | 结构图：PubChem CID 464205（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/464205) | 核苷酸类似物 |
+| [`pubchem-cid-447043.png`](assets/figures/pubchem-cid-447043.png) | 结构图：PubChem CID 447043（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/447043) | 阿奇霉素 |
+| [`pubchem-cid-4510.png`](assets/figures/pubchem-cid-4510.png) | 结构图：PubChem CID 4510（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/4510) | 硝酸甘油 |
+| [`pubchem-cid-45375808.png`](assets/figures/pubchem-cid-45375808.png) | 结构图：PubChem CID 45375808（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/45375808) | 酯酶水解与前药活化、索非布韦 |
+| [`pubchem-cid-457193.png`](assets/figures/pubchem-cid-457193.png) | 结构图：PubChem CID 457193（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/457193) | 放线菌素D |
+| [`pubchem-cid-4594.png`](assets/figures/pubchem-cid-4594.png) | 结构图：PubChem CID 4594（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/4594) | 奥美拉唑 |
+| [`pubchem-cid-462382.png`](assets/figures/pubchem-cid-462382.png) | 结构图：PubChem CID 462382（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/462382) | MG132 |
+| [`pubchem-cid-464205.png`](assets/figures/pubchem-cid-464205.png) | 结构图：PubChem CID 464205（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/464205) | 核苷酸类似物、替诺福韦 |
 | [`pubchem-cid-471161.png`](assets/figures/pubchem-cid-471161.png) | 结构图：PubChem CID 471161（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/471161) | 交叉耐药 |
+| [`pubchem-cid-4763.png`](assets/figures/pubchem-cid-4763.png) | 结构图：PubChem CID 4763（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/4763) | 苯巴比妥 |
+| [`pubchem-cid-5280965.png`](assets/figures/pubchem-cid-5280965.png) | 结构图：PubChem CID 5280965（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/5280965) | 两性霉素B |
+| [`pubchem-cid-5284616.png`](assets/figures/pubchem-cid-5284616.png) | 结构图：PubChem CID 5284616（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/5284616) | 雷帕霉素 |
+| [`pubchem-cid-5291.png`](assets/figures/pubchem-cid-5291.png) | 结构图：PubChem CID 5291（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/5291) | 伊马替尼 |
+| [`pubchem-cid-5388962.png`](assets/figures/pubchem-cid-5388962.png) | 结构图：PubChem CID 5388962（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/5388962) | 依那普利 |
 | [`pubchem-cid-5426.png`](assets/figures/pubchem-cid-5426.png) | 结构图：PubChem CID 5426（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/5426) | 外消旋体 |
+| [`pubchem-cid-54678486.png`](assets/figures/pubchem-cid-54678486.png) | 结构图：PubChem CID 54678486（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/54678486) | 华法林 |
+| [`pubchem-cid-5479530.png`](assets/figures/pubchem-cid-5479530.png) | 结构图：PubChem CID 5479530（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/5479530) | 头孢曲松 |
+| [`pubchem-cid-5702160.png`](assets/figures/pubchem-cid-5702160.png) | 结构图：PubChem CID 5702160（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/5702160) | 法莫替丁 |
+| [`pubchem-cid-5702198.png`](assets/figures/pubchem-cid-5702198.png) | 结构图：PubChem CID 5702198（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/5702198) | 顺铂 |
+| [`pubchem-cid-5743.png`](assets/figures/pubchem-cid-5743.png) | 结构图：PubChem CID 5743（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/5743) | 地塞米松 |
 | [`pubchem-cid-5789.png`](assets/figures/pubchem-cid-5789.png) | 结构图：PubChem CID 5789（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/5789) | 脱氧胸苷 |
+| [`pubchem-cid-5816.png`](assets/figures/pubchem-cid-5816.png) | 结构图：PubChem CID 5816（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/5816) | 肾上腺素 |
 | [`pubchem-cid-5957.png`](assets/figures/pubchem-cid-5957.png) | 结构图：PubChem CID 5957（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/5957) | 核苷酸、三磷酸、单磷酸 / 二磷酸 / 三磷酸、ATP |
+| [`pubchem-cid-5978.png`](assets/figures/pubchem-cid-5978.png) | 结构图：PubChem CID 5978（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/5978) | 长春新碱 |
 | [`pubchem-cid-6029.png`](assets/figures/pubchem-cid-6029.png) | 结构图：PubChem CID 6029（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/6029) | 核苷 |
-| [`pubchem-cid-60825.png`](assets/figures/pubchem-cid-60825.png) | 结构图：PubChem CID 60825（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/60825) | 核苷类似物 |
+| [`pubchem-cid-6047.png`](assets/figures/pubchem-cid-6047.png) | 结构图：PubChem CID 6047（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/6047) | 左旋多巴 |
+| [`pubchem-cid-60606.png`](assets/figures/pubchem-cid-60606.png) | 结构图：PubChem CID 60606（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/60606) | 氯吡格雷 |
+| [`pubchem-cid-60750.png`](assets/figures/pubchem-cid-60750.png) | 结构图：PubChem CID 60750（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/60750) | 吉西他滨 |
+| [`pubchem-cid-60823.png`](assets/figures/pubchem-cid-60823.png) | 结构图：PubChem CID 60823（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/60823) | 阿托伐他汀 |
+| [`pubchem-cid-60825.png`](assets/figures/pubchem-cid-60825.png) | 结构图：PubChem CID 60825（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/60825) | 核苷类似物、拉米夫定 |
+| [`pubchem-cid-60846.png`](assets/figures/pubchem-cid-60846.png) | 结构图：PubChem CID 60846（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/60846) | 缬沙坦 |
 | [`pubchem-cid-60877.png`](assets/figures/pubchem-cid-60877.png) | 结构图：PubChem CID 60877（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/60877) | 细胞内半衰期 |
 | [`pubchem-cid-60961.png`](assets/figures/pubchem-cid-60961.png) | 结构图：PubChem CID 60961（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/60961) | 核苷 |
 | [`pubchem-cid-612.png`](assets/figures/pubchem-cid-612.png) | 结构图：PubChem CID 612（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/612) | 对映体 |
+| [`pubchem-cid-6167.png`](assets/figures/pubchem-cid-6167.png) | 结构图：PubChem CID 6167（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/6167) | 秋水仙碱 |
+| [`pubchem-cid-6197.png`](assets/figures/pubchem-cid-6197.png) | 结构图：PubChem CID 6197（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/6197) | 放线菌酮 |
+| [`pubchem-cid-6253.png`](assets/figures/pubchem-cid-6253.png) | 结构图：PubChem CID 6253（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/6253) | 阿糖胞苷 |
+| [`pubchem-cid-6436223.png`](assets/figures/pubchem-cid-6436223.png) | 结构图：PubChem CID 6436223（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/6436223) | 巴佛洛霉素A1 |
 | [`pubchem-cid-64968.png`](assets/figures/pubchem-cid-64968.png) | 结构图：PubChem CID 64968（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/64968) | dNTP |
+| [`pubchem-cid-65028.png`](assets/figures/pubchem-cid-65028.png) | 结构图：PubChem CID 65028（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/65028) | 奥司他韦 |
 | [`pubchem-cid-65070.png`](assets/figures/pubchem-cid-65070.png) | 结构图：PubChem CID 65070（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/65070) | dUTP |
 | [`pubchem-cid-67286591.png`](assets/figures/pubchem-cid-67286591.png) | 结构图：PubChem CID 67286591（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/67286591) | 病毒聚合酶 |
 | [`pubchem-cid-67519.png`](assets/figures/pubchem-cid-67519.png) | 结构图：PubChem CID 67519（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/67519) | 生物电子等排体 |
 | [`pubchem-cid-9260.png`](assets/figures/pubchem-cid-9260.png) | 结构图：PubChem CID 9260（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/9260) | 嘧啶 |
+| [`pubchem-cid-9811704.png`](assets/figures/pubchem-cid-9811704.png) | 结构图：PubChem CID 9811704（美国 NCBI，公共领域）。 | [原图页](https://pubchem.ncbi.nlm.nih.gov/compound/9811704) | 阿卡波糖 |
 | [`qsar-in-organic-chemistry.png`](assets/figures/qsar-in-organic-chemistry.png) | 图：Luyaoz4，Wikimedia Commons，CC0。 | [原图页](https://commons.wikimedia.org/wiki/File:QSAR_in_Organic_Chemistry.png) | 定量构效关系 |
 | [`reverse-phase-gradient-elution-schematic.svg`](assets/figures/reverse-phase-gradient-elution-schematic.svg) | 图：Nategm，Wikimedia Commons，CC BY-SA 4.0。 | [原图页](https://commons.wikimedia.org/wiki/File:Reverse_Phase_Gradient_Elution_Schematic.svg) | 流动相 |
 | [`reverse-transcriptase-3klf-labels.jpg`](assets/figures/reverse-transcriptase-3klf-labels.jpg) | 图：Thomas Splettstoesser (www.scistyle.com)，Wikimedia Commons，CC BY-SA 3.0。 | [原图页](https://commons.wikimedia.org/wiki/File:Reverse_transcriptase_3KLF_labels.png) | 逆转录酶 |

@@ -566,6 +566,7 @@
   var passageBody = $("passageBody"), passageSrc = $("passageSrc");
   function tip(text) { return '<p class="passage-tip">' + text + "</p>"; }
   var H_MARK = "\uE000";   /* 段落开头带这个私用字符的，按小标题显示 */
+  var IMG_MARK = "\uE001"; /* 整段只有这个私用字符＋序号的，是导入文档里的一张图，图本体存在 doc.imgs 里 */
   var doc = null;           /* 当前载入的文献 {paras, title, origin, len}；null 表示正在看示例 */
   function showSample() {
     doc = null;
@@ -631,6 +632,27 @@
     return out;
   }
 
+  /* 先把 Markdown / HTML 里的图抽出来存好，正文里只留一个占位段。
+     这样内嵌的 base64 图不会被 mdToText 当标记删掉，也不会占正文的字数上限。 */
+  function extractImages(md, imgs) {
+    function keep(src, alt) {
+      src = String(src || "").trim().split(/\s+/)[0];
+      if (!src || /["'<>]/.test(src)) return "";
+      var ok = /^(data:image\/[a-z+]+;base64,|https?:\/\/|\/|\.|[\w\-]+\/)/i.test(src)
+        || /^[\w\-.]+\.(png|jpe?g|gif|webp|svg)$/i.test(src);
+      if (!ok) return "";
+      imgs.push({ src: src, alt: String(alt || "").trim() });
+      return "\n\n" + IMG_MARK + (imgs.length - 1) + "\n\n";
+    }
+    return md
+      .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, function (m, alt, src) { return keep(src, alt) || m; })
+      .replace(/<img\b[^>]*>/gi, function (tag) {
+        var s = /src\s*=\s*"([^"]+)"/i.exec(tag) || /src\s*=\s*'([^']+)'/i.exec(tag);
+        if (!s) return "";
+        var a = /alt\s*=\s*"([^"]*)"/i.exec(tag) || /alt\s*=\s*'([^']*)'/i.exec(tag);
+        return keep(s[1], a ? a[1] : "");
+      });
+  }
   /* Markdown → 纯文本：去掉标题 / 粗体 / 链接 / 表格等标记，保留段落 */
   function mdToText(md) {
     return md
@@ -665,6 +687,12 @@
     var count = 0, html = doc.title ? "<h2>" + esc(doc.title) + "</h2>" : "";
     doc.paras.forEach(function (p) {
       if (p.charAt(0) === H_MARK) { html += "<h3>" + esc(p.slice(1)) + "</h3>"; return; }
+      if (p.charAt(0) === IMG_MARK) {
+        var im = (doc.imgs || [])[parseInt(p.slice(1), 10)];
+        if (im) html += '<figure class="doc-fig"><img data-zoom src="' + esc(im.src) + '" alt="' + esc(im.alt) + '">'
+          + (im.alt ? "<figcaption>" + esc(im.alt) + "</figcaption>" : "") + "</figure>";
+        return;
+      }
       var r = highlight(p);
       count += r.count;
       html += "<p>" + r.html + "</p>";
@@ -676,8 +704,20 @@
     passageSrc.innerHTML = "<b>" + esc(doc.title || "粘贴的文本") + "</b>"
       + (doc.origin ? " · " + esc(doc.origin) : "")
       + " · " + num(doc.len) + " 字 · 标出 " + num(count) + " 处基础词"
+      + (doc.imgs && doc.imgs.length ? " · 含图 " + doc.imgs.length + " 张" : "")
       + (known ? " · 已掌握的 " + known + " 个词不再标出" : "");
   }
+  /* 导入文档里的图加载失败（多半是相对路径的图不在文档里）时，把图位换成一句说明，不留破图图标 */
+  passageBody.addEventListener("error", function (e) {
+    var img = e.target;
+    if (!img || img.tagName !== "IMG" || !img.closest(".doc-fig")) return;
+    var fig = img.closest(".doc-fig");
+    fig.classList.add("fig-broken");
+    var cap = fig.querySelector("figcaption");
+    if (!cap) { cap = document.createElement("figcaption"); fig.appendChild(cap); }
+    cap.textContent = "这张图没能加载（" + (img.getAttribute("alt") || "无图题") + "）：相对路径的图片不在导入的文档里，内嵌图和网络图不受影响。";
+    img.remove();
+  }, true);
   function rerenderPassage() { if (doc) renderDoc(); else showSample(); }
   function toggleMastered(term) {
     if (mastered[term.w]) delete mastered[term.w]; else mastered[term.w] = 1;
@@ -696,14 +736,15 @@
   function loadText(raw, opts) {
     opts = opts || {};
     raw = String(raw || "").replace(/\r\n?/g, "\n").trim();
-    if (opts.markdown || looksLikeMarkdown(raw)) raw = mdToText(raw).trim();
+    var imgs = [];
+    if (opts.markdown || looksLikeMarkdown(raw)) raw = mdToText(extractImages(raw, imgs)).trim();
     if (raw.replace(/\s/g, "").length < 20) {
       srcStatus("内容太短了，至少放进一两句完整的话。", true);
       return false;
     }
     var truncated = raw.length > CONFIG.maxChars;
     if (truncated) raw = raw.slice(0, CONFIG.maxChars);
-    doc = { paras: toParagraphs(raw, opts.forceJoin), title: opts.title || "", origin: opts.origin || "", len: raw.length };
+    doc = { paras: toParagraphs(raw, opts.forceJoin), title: opts.title || "", origin: opts.origin || "", len: raw.length, imgs: imgs };
     renderDoc();
     $("panel-read").classList.add("is-reading");
     $("modeSample").setAttribute("aria-pressed", "false");
