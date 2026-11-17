@@ -753,7 +753,9 @@
     opts = opts || {};
     raw = String(raw || "").replace(/\r\n?/g, "\n").trim();
     var imgs = [];
-    if (opts.markdown || looksLikeMarkdown(raw)) raw = mdToText(extractImages(raw, imgs)).trim();
+    /* 粘贴进来的文本没有文件后缀可判断：带 HTML 标签（sup/sub/表格等）的也走清理，
+       否则 <sup> 这类标签会被当成普通文字原样显示 */
+    if (opts.markdown || looksLikeMarkdown(raw) || /<\/?(sup|sub|table|thead|tbody|tr|td|th|br|p|b|i|em|strong)\b[^>]*>/i.test(raw)) raw = mdToText(extractImages(raw, imgs)).trim();
     if (raw.replace(/\s/g, "").length < 20) {
       srcStatus("内容太短了，至少放进一两句完整的话。", true);
       return false;
