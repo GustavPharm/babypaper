@@ -63,7 +63,7 @@ assets/figures/         Term figures (sources and licences in CREDITS.md)
 data/kb.js              Glossary, one JSON entry per line
 data/chains.js          Logic chains
 data/experiments.js     Experiment quick reference
-tools/                  Local preview, data self-check, figure sizes, credits list, EN term list, single-file build
+tools/                  Local preview, data self-check, figure sizes, credits list, EN term list, single-file build, icon generator
 docs/                   Glossary revision log and other documents
 ```
 
@@ -118,6 +118,8 @@ node tools/build-credits.js
 No build step: edit `index.html`, `assets/css/app.css`, `assets/js/app.js` and refresh. Design tokens (colours, fonts, radii) live at the top of `app.css`, with a matching set for dark mode.
 
 After publishing your fork, set `CONFIG.repoUrl` at the top of `assets/js/app.js` to your repository URL and a GitHub link appears in the header.
+
+The icons (home-screen icon, Android adaptive icon, favicon) are drawn by `tools/build-icons.js`; the glyph geometry and colours sit at the top of the script. Run `node tools/build-icons.js` to re-export every size.
 
 ## Sources and disclaimer
 

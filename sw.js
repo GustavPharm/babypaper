@@ -1,6 +1,6 @@
 /* 宝宝文献 · 药学版 Service Worker：装到主屏幕后离线可用。
    策略：同源请求先查缓存、同时后台刷新（stale-while-revalidate）；改版时改 CACHE 名。 */
-var CACHE = "babypaper-v1";
+var CACHE = "babypaper-v2";
 var CORE = [
   "./",
   "index.html",

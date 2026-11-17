@@ -63,7 +63,7 @@ assets/figures/         词条配图（来源与许可证见 CREDITS.md）
 data/kb.js              词库，一行一个词条
 data/chains.js          逻辑链
 data/experiments.js     实验速查
-tools/                  本地预览、数据自检、配图尺寸、署名清单、英文标词表、打包单文件
+tools/                  本地预览、数据自检、配图尺寸、署名清单、英文标词表、打包单文件、生成图标
 docs/                   词库修订记录等文档
 ```
 
@@ -124,6 +124,8 @@ node tools/build-credits.js
 没有构建步骤：改 `index.html`、`assets/css/app.css`、`assets/js/app.js`，刷新页面即可。颜色、字体、圆角等设计变量集中在 `app.css` 开头，深色模式有对应的一组。
 
 发布后，把 `assets/js/app.js` 开头 `CONFIG.repoUrl` 填成仓库地址，顶栏会出现 GitHub 入口。
+
+图标（桌面图标、安卓自适应图标、favicon）是 `tools/build-icons.js` 画出来的，字形和配色都在脚本开头；改完跑一遍 `node tools/build-icons.js` 重新导出全部尺寸。
 
 ## 内容来源与免责声明
 
