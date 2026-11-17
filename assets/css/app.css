@@ -389,6 +389,28 @@ body.dragging .passage { outline: 2px dashed var(--accent); outline-offset: 5px;
 .passage-body .doc-fig img { max-width: 100%; height: auto; background: #fff; border: 1px solid var(--line); border-radius: 8px; }
 .passage-body .doc-fig figcaption { margin-top: 7px; color: var(--ink-3); font-family: var(--font-ui); font-size: 12.5px; letter-spacing: .03em; }
 .passage-body .doc-fig.fig-broken { padding: 12px 14px; border: 1px dashed var(--line); border-radius: 8px; }
+/* 红字笔记 */
+.passage-body .my-note { color: #cf3a22; font-weight: 600; background: rgba(207, 58, 34, .08); border-radius: 2px; padding: 0 1px; }
+.passage-body.noting p, .passage-body.noting h3 { cursor: text; }
+.read-tools button[aria-pressed="true"] { background: var(--surface-2); color: var(--ink); }
+.note-editor { border-top: 1px solid var(--line); background: var(--surface-2); padding: 14px 44px 18px; }
+.note-editor-ctx { color: var(--ink-2); font-size: 13px; margin-bottom: 8px; }
+.note-editor textarea {
+  width: 100%; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: #cf3a22;
+  font: inherit; font-size: 14.5px; line-height: 1.6; padding: 9px 11px; resize: vertical;
+}
+.note-editor textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.note-editor-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+/* 文献存档 */
+.archive-box { margin-top: 14px; }
+.archive-box h2 { font-size: 16px; margin-bottom: 6px; }
+.archive-box > p { color: var(--ink-3); font-size: 13px; line-height: 1.7; margin-bottom: 6px; }
+.archive-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+.archive-info { min-width: 0; }
+.archive-info b { display: block; font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.archive-info span { color: var(--ink-3); font-size: 12.5px; }
+.archive-actions { display: flex; gap: 6px; flex: none; }
+.btn.small { min-height: 30px; padding: 4px 11px; font-size: 12.5px; }
 .passage-body .passage-tip {
   margin: 30px 0 0; padding: 16px 0 0; border-top: 1px solid var(--line); color: var(--ink-3);
   font-family: var(--font-ui); font-size: 12.5px; letter-spacing: .03em; line-height: 1.7;

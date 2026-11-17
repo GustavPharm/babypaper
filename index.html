@@ -77,6 +77,7 @@
               <button type="button" id="modePaste" aria-pressed="false">粘贴文本</button>
               <button type="button" id="modeFile">导入文件</button>
               <button type="button" id="modeOcr" aria-pressed="false">识别扫描件</button>
+              <button type="button" id="modeArchive" aria-pressed="false">我的存档</button>
             </div>
             <p class="source-hint"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V7.5a5 5 0 0 1 10 0V10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="5" y="10" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>全部在你的浏览器里运行，文献不会上传</p>
             <input type="file" id="fileInput" accept=".txt,.md,.markdown,.pdf,text/plain,text/markdown,application/pdf" hidden />
@@ -126,6 +127,12 @@
             <div class="progress" id="ocrBar" hidden><i id="ocrBarFill"></i></div>
             <p class="status" id="ocrStatus" role="status"></p>
           </div>
+
+          <div class="archive-box" id="archiveBox" hidden>
+            <h2>我的存档</h2>
+            <p>导入过的文献会自动存档在这里（只存在你的浏览器里），点「打开」接着读，红字笔记也会一起保留。最多存 12 篇，满了自动清掉最早的。</p>
+            <div id="archiveList"></div>
+          </div>
         </div>
 
         <div class="reader-grid">
@@ -137,9 +144,19 @@
                 <button type="button" id="fontUp" aria-label="放大字号" title="放大字号">A<span aria-hidden="true">+</span></button>
                 <button type="button" id="leadingBtn" aria-pressed="false" title="行距">宽行距</button>
                 <button type="button" id="faceBtn" aria-pressed="false" title="正文字体">黑体</button>
+                <button type="button" id="noteToggle" aria-pressed="false" title="在正文里插入红字笔记">✎ 红字笔记</button>
               </div>
             </header>
             <div class="passage-body" id="passageBody"></div>
+            <div class="note-editor" id="noteEditor" hidden>
+              <p class="note-editor-ctx" id="noteEditorCtx">在正文里点一下，选好插入位置，再写笔记。</p>
+              <textarea id="noteText" rows="2" placeholder="写下你的笔记，会以红字插进正文，并自动存档"></textarea>
+              <div class="note-editor-actions">
+                <button class="btn primary" id="noteInsert" type="button">插入笔记</button>
+                <button class="btn ghost" id="noteDelete" type="button" hidden>删除这条笔记</button>
+                <button class="btn ghost" id="noteCancel" type="button">取消</button>
+              </div>
+            </div>
           </article>
 
           <aside class="defcard" id="defCard" aria-label="词条解释">

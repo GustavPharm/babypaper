@@ -696,22 +696,23 @@
   /* mdToText 把 <sup>/<sub> 换成的私用标记，在文本转义之后还原成真标签 */
   function restoreMarks(html) {
     return html.replace(/\uE002/g, "<sup>").replace(/\uE003/g, "</sup>")
-      .replace(/\uE004/g, "<sub>").replace(/\uE005/g, "</sub>");
+      .replace(/\uE004/g, "<sub>").replace(/\uE005/g, "</sub>")
+      .replace(/\uE006/g, '<span class="my-note">').replace(/\uE007/g, "</span>");
   }
   /* 按当前的标词规则把 doc 画进阅读区；「已掌握」变了以后会再调一次 */
   function renderDoc() {
     var count = 0, html = doc.title ? "<h2>" + esc(doc.title) + "</h2>" : "";
-    doc.paras.forEach(function (p) {
-      if (p.charAt(0) === H_MARK) { html += "<h3>" + restoreMarks(esc(p.slice(1))) + "</h3>"; return; }
+    doc.paras.forEach(function (p, pidx) {
+      if (p.charAt(0) === H_MARK) { html += '<h3 data-pidx="' + pidx + '">' + restoreMarks(esc(p.slice(1))) + "</h3>"; return; }
       if (p.charAt(0) === IMG_MARK) {
         var im = (doc.imgs || [])[parseInt(p.slice(1), 10)];
-        if (im) html += '<figure class="doc-fig"><img data-zoom src="' + esc(im.src) + '" alt="' + esc(im.alt) + '">'
+        if (im) html += '<figure class="doc-fig" data-pidx="' + pidx + '"><img data-zoom src="' + esc(im.src) + '" alt="' + esc(im.alt) + '">'
           + (im.alt ? "<figcaption>" + esc(im.alt) + "</figcaption>" : "") + "</figure>";
         return;
       }
       var r = highlight(p);
       count += r.count;
-      html += "<p>" + restoreMarks(r.html) + "</p>";
+      html += '<p data-pidx="' + pidx + '">' + restoreMarks(r.html) + "</p>";
     });
     passageBody.innerHTML = html + tip(count
       ? "带底色的词可以直接点。其他词划选后点「查这个词」；词库里没有的，会给出最接近的词条。"
@@ -734,6 +735,184 @@
     cap.textContent = "这张图没能加载（" + (img.getAttribute("alt") || "无图题") + "）：相对路径的图片不在导入的文档里，内嵌图和网络图不受影响。";
     img.remove();
   }, true);
+  /* ================= 文献存档 =================
+     导入过的文献自动存进 localStorage，下次从「我的存档」直接打开，红字笔记也存在里面。 */
+  var docArchive = store.get("docArchive", []);
+  function persistArchive() {
+    try { localStorage.setItem("lp:docArchive", JSON.stringify(docArchive)); return true; }
+    catch (e) { return false; }
+  }
+  function archiveIdFor(d) {
+    var hit = docArchive.filter(function (e) { return e.title === d.title && e.len === d.len; })[0];
+    return hit ? hit.id : "d" + Date.now().toString(36) + Math.floor(Math.random() * 1e4).toString(36);
+  }
+  function archiveSave() {
+    if (!doc || !doc.id) return;
+    var entry = { id: doc.id, title: doc.title || "未命名文献", origin: doc.origin || "", len: doc.len, paras: doc.paras, imgs: doc.imgs || [], savedAt: Date.now() };
+    var i = docArchive.findIndex(function (e) { return e.id === doc.id; });
+    if (i >= 0) docArchive[i] = entry; else docArchive.unshift(entry);
+    docArchive = docArchive.slice(0, 12);
+    if (!persistArchive()) toast("存档空间不足，这篇没存下（多半是内嵌图太大）");
+    renderArchiveList();
+  }
+  function fmtDate(ts) {
+    var d = new Date(ts);
+    return (d.getMonth() + 1) + "月" + d.getDate() + "日 " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+  }
+  function renderArchiveList() {
+    var box = $("archiveList");
+    if (!box) return;
+    if (!docArchive.length) { box.innerHTML = '<p class="empty-line">还没有存档。导入一篇文献，这里就会出现。</p>'; return; }
+    box.innerHTML = docArchive.map(function (e) {
+      return '<div class="archive-item"><div class="archive-info"><b>' + esc(e.title || "未命名文献") + "</b><span>"
+        + esc(e.origin || "") + " · " + num(e.len) + " 字 · " + fmtDate(e.savedAt) + "</span></div>"
+        + '<div class="archive-actions"><button type="button" class="btn small" data-open="' + e.id + '">打开</button>'
+        + '<button type="button" class="btn ghost small" data-del="' + e.id + '">删除</button></div></div>';
+    }).join("");
+  }
+  function setArchiveOpen(open) {
+    $("archiveBox").hidden = !open;
+    $("modeArchive").setAttribute("aria-pressed", open ? "true" : "false");
+  }
+  $("modeArchive").addEventListener("click", function () {
+    var open = $("archiveBox").hidden;
+    setArchiveOpen(open);
+    if (open) { setPasteOpen(false); setOcrOpen(false); renderArchiveList(); }
+  });
+  $("archiveList").addEventListener("click", function (e) {
+    var openBtn = e.target.closest("[data-open]"), delBtn = e.target.closest("[data-del]");
+    if (openBtn) {
+      var ent = docArchive.filter(function (x) { return x.id === openBtn.getAttribute("data-open"); })[0];
+      if (!ent) return;
+      doc = { paras: (ent.paras || []).slice(), title: ent.title, origin: ent.origin, len: ent.len, imgs: ent.imgs || [], id: ent.id };
+      renderDoc();
+      $("panel-read").classList.add("is-reading");
+      $("modeSample").setAttribute("aria-pressed", "false");
+      setArchiveOpen(false); setPasteOpen(false); setOcrOpen(false);
+      srcStatus("");
+      if (shouldDock()) resetDef();
+      hideSelBtn();
+      $("panel-read").querySelector(".source").scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    if (delBtn) {
+      if (delBtn.dataset.armed) {
+        docArchive = docArchive.filter(function (x) { return x.id !== delBtn.getAttribute("data-del"); });
+        persistArchive(); renderArchiveList(); toast("已删除这篇存档");
+      } else {
+        delBtn.dataset.armed = "1"; delBtn.textContent = "确认删除？";
+        setTimeout(function () { if (delBtn.isConnected) { delete delBtn.dataset.armed; delBtn.textContent = "删除"; } }, 2600);
+      }
+    }
+  });
+  renderArchiveList();
+
+  /* ================= 红字笔记 =================
+     笔记以 \uE006…\uE007 标记存进段落原文，渲染时还原成红字 span，跟着存档一起保存。 */
+  var NOTE_O = "\uE006", NOTE_C = "\uE007";
+  var noteMode = false, noteCtx = null;
+  function cleanNoteText(s) {
+    return String(s || "").replace(/[\uE000-\uE007]/g, "").replace(/\s+/g, " ").trim().slice(0, 300);
+  }
+  function setNoteMode(on) {
+    noteMode = on;
+    $("noteToggle").setAttribute("aria-pressed", on ? "true" : "false");
+    passageBody.classList.toggle("noting", on);
+    if (!on) { $("noteEditor").hidden = true; noteCtx = null; }
+    else toast("笔记模式：点正文里要标注的位置，再写笔记；点已有的红字笔记可以改或删。");
+  }
+  $("noteToggle").addEventListener("click", function () {
+    if (!doc) { toast("先导入一篇文献，再记笔记"); return; }
+    setNoteMode(!noteMode);
+  });
+  /* 渲染后的纯文本与原文只差零宽标记（上下标、笔记边界），数非标记字符把偏移对齐回原文坐标 */
+  function renderedOffsetToRaw(renderedOff, rawText) {
+    var count = 0, i = 0;
+    while (i < rawText.length && count < renderedOff) {
+      if (!/[\uE000-\uE007]/.test(rawText.charAt(i))) count++;
+      i++;
+    }
+    return i;
+  }
+  function caretRenderedOffset(holder, range) {
+    var walker = document.createTreeWalker(holder, NodeFilter.SHOW_TEXT);
+    var len = 0, node;
+    while ((node = walker.nextNode())) {
+      if (node === range.startContainer) { len += range.startOffset; break; }
+      len += node.length;
+    }
+    return len;
+  }
+  passageBody.addEventListener("click", function (e) {
+    if (!noteMode || !doc) return;
+    var holder = e.target.closest("[data-pidx]");
+    if (!holder || holder.tagName === "FIGURE") return;
+    e.preventDefault(); e.stopPropagation();
+    var pidx = +holder.getAttribute("data-pidx");
+    var raw = doc.paras[pidx];
+    if (raw == null) return;
+    var range = null;
+    if (document.caretRangeFromPoint) range = document.caretRangeFromPoint(e.clientX, e.clientY);
+    else if (document.caretPositionFromPoint) {
+      var cp = document.caretPositionFromPoint(e.clientX, e.clientY);
+      if (cp) { range = document.createRange(); range.setStart(cp.offsetNode, cp.offset); }
+    }
+    var rOff = (range && holder.contains(range.startContainer))
+      ? caretRenderedOffset(holder, range)
+      : raw.replace(/[\uE000-\uE007]/g, "").length;
+    var off = renderedOffsetToRaw(rOff, raw);
+    /* 别把笔记插进上下标或已有笔记的标记中间：越过紧邻的收尾标记 */
+    while (off < raw.length && "\uE003\uE005\uE007".indexOf(raw.charAt(off)) >= 0) off++;
+    noteCtx = null;
+    if (e.target.closest(".my-note")) {
+      var re = /\uE006([\s\S]*?)\uE007/g, m;
+      while ((m = re.exec(raw))) {
+        if (off >= m.index && off <= m.index + m[0].length) {
+          noteCtx = { pidx: pidx, start: m.index, end: m.index + m[0].length };
+          $("noteText").value = m[1];
+          break;
+        }
+      }
+    }
+    if (!noteCtx) { noteCtx = { pidx: pidx, off: off }; $("noteText").value = ""; }
+    var editing = noteCtx.start != null;
+    $("noteEditorCtx").textContent = editing
+      ? "正在编辑第 " + (pidx + 1) + " 段里的一条笔记："
+      : "插入位置：第 " + (pidx + 1) + " 段、你点的地方。写好点「插入笔记」。";
+    $("noteDelete").hidden = !editing;
+    $("noteInsert").textContent = editing ? "保存修改" : "插入笔记";
+    $("noteEditor").hidden = false;
+    $("noteEditor").scrollIntoView({ behavior: "smooth", block: "nearest" });
+    $("noteText").focus({ preventScroll: true });
+  }, true);
+  function applyNoteChange(pidx, newRaw) {
+    doc.paras[pidx] = newRaw;
+    var y = window.scrollY;
+    renderDoc();
+    window.scrollTo(0, y);
+    archiveSave();
+    $("noteEditor").hidden = true;
+    noteCtx = null;
+    toast("笔记已保存进存档");
+  }
+  $("noteInsert").addEventListener("click", function () {
+    if (!noteCtx || !doc) return;
+    var text = cleanNoteText($("noteText").value);
+    var raw = doc.paras[noteCtx.pidx];
+    if (!text) { toast(noteCtx.start != null ? "笔记是空的，要删请点「删除这条笔记」" : "先写点笔记内容"); return; }
+    if (noteCtx.start != null) applyNoteChange(noteCtx.pidx, raw.slice(0, noteCtx.start) + NOTE_O + text + NOTE_C + raw.slice(noteCtx.end));
+    else applyNoteChange(noteCtx.pidx, raw.slice(0, noteCtx.off) + NOTE_O + text + NOTE_C + raw.slice(noteCtx.off));
+  });
+  $("noteDelete").addEventListener("click", function () {
+    if (!noteCtx || noteCtx.start == null || !doc) return;
+    var raw = doc.paras[noteCtx.pidx];
+    applyNoteChange(noteCtx.pidx, raw.slice(0, noteCtx.start) + raw.slice(noteCtx.end));
+  });
+  $("noteCancel").addEventListener("click", function () {
+    $("noteEditor").hidden = true;
+    noteCtx = null;
+  });
+
   function rerenderPassage() { if (doc) renderDoc(); else showSample(); }
   function toggleMastered(term) {
     if (mastered[term.w]) delete mastered[term.w]; else mastered[term.w] = 1;
@@ -763,6 +942,8 @@
     var truncated = raw.length > CONFIG.maxChars;
     if (truncated) raw = raw.slice(0, CONFIG.maxChars);
     doc = { paras: toParagraphs(raw, opts.forceJoin), title: opts.title || "", origin: opts.origin || "", len: raw.length, imgs: imgs };
+    doc.id = archiveIdFor(doc);
+    archiveSave();
     renderDoc();
     $("panel-read").classList.add("is-reading");
     $("modeSample").setAttribute("aria-pressed", "false");
