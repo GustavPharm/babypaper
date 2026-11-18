@@ -389,6 +389,14 @@ body.dragging .passage { outline: 2px dashed var(--accent); outline-offset: 5px;
 .passage-body .doc-fig img { max-width: 100%; height: auto; background: #fff; border: 1px solid var(--line); border-radius: 8px; }
 .passage-body .doc-fig figcaption { margin-top: 7px; color: var(--ink-3); font-family: var(--font-ui); font-size: 12.5px; letter-spacing: .03em; }
 .passage-body .doc-fig.fig-broken { padding: 12px 14px; border: 1px dashed var(--line); border-radius: 8px; }
+/* 导入文档里的表格：真表格，窄屏在容器里横向滚动，不挤成一团 */
+.passage-body .doc-table-wrap { margin: 1.3em 0; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--line); border-radius: 10px; }
+.passage-body .doc-table { border-collapse: collapse; width: 100%; min-width: 520px; font-family: var(--font-ui); font-size: 14px; line-height: 1.55; }
+.passage-body .doc-table th, .passage-body .doc-table td { padding: 7px 11px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); overflow-wrap: break-word; }
+.passage-body .doc-table thead th { background: var(--surface-2); color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--line-strong); }
+.passage-body .doc-table tbody tr:last-child td { border-bottom: 0; }
+.passage-body .doc-table td { font-variant-numeric: tabular-nums; }
+@media (max-width: 640px) { .passage-body .doc-table { font-size: 13.5px; } .passage-body .doc-table th, .passage-body .doc-table td { padding: 6px 9px; } }
 /* 红字笔记 */
 .passage-body .my-note { color: #cf3a22; font-weight: 600; background: rgba(207, 58, 34, .08); border-radius: 2px; padding: 0 1px; }
 .passage-body.noting p, .passage-body.noting h3 { cursor: text; }

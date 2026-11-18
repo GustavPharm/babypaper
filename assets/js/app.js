@@ -567,6 +567,7 @@
   function tip(text) { return '<p class="passage-tip">' + text + "</p>"; }
   var H_MARK = "\uE000";   /* 段落开头带这个私用字符的，按小标题显示 */
   var IMG_MARK = "\uE001"; /* 整段只有这个私用字符＋序号的，是导入文档里的一张图，图本体存在 doc.imgs 里 */
+  var T_MARK = "\uE008";   /* 整段是这个私用字符＋JSON 的，是导入文档里的一张表格，行列存在 JSON 里（head/rows） */
   var doc = null;           /* 当前载入的文献 {paras, title, origin, len}；null 表示正在看示例 */
   function showSample() {
     doc = null;
@@ -653,14 +654,72 @@
         return keep(s[1], a ? a[1] : "");
       });
   }
-  /* Markdown → 纯文本：去掉标题 / 粗体 / 链接 / 表格等标记，保留段落。
+  /* 导入的表格先整张抽出来存进这里，正文里只留一个占位段（T_MARK＋序号，和图片占位同一种办法）；
+     loadText 分段后由 expandTables 把占位段换成 T_MARK＋JSON 的表格块。
+     表格块是普通字符串，能原样进存档（paras 数组），渲染时再画成真表格，不再压平成圆点分隔的一行。 */
+  var tableStash = [];
+  function cleanCell(s) {
+    return String(s == null ? "" : s)
+      .replace(/<br\s*\/?>/gi, " ")
+      .replace(/<[^>]*>/g, "")
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+      .replace(/(\*\*|__)(.+?)\1/g, "$2")
+      .replace(/~~(.+?)~~/g, "$1")
+      .replace(/(\*|_)(.+?)\1/g, "$2")
+      .replace(/`([^`]+)`/g, "$1")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+  function stashTable(head, rows) {
+    tableStash.push({ head: head, rows: rows });
+    return "\n\n" + T_MARK + (tableStash.length - 1) + "\n\n";
+  }
+  function splitMdRow(line) {
+    var t = String(line).trim();
+    if (t.charAt(0) === "|") t = t.slice(1);
+    if (t.charAt(t.length - 1) === "|") t = t.slice(0, -1);
+    return t.split("|").map(cleanCell);
+  }
+  function isMdSepRow(line) { return /^[ \t]*\|?[ \t:|-]+\|[ \t:|-]*$/.test(line) && /-/.test(line); }
+  function expandTables(paras) {
+    return paras.map(function (p) {
+      if (p.charAt(0) !== T_MARK) return p;
+      var t = tableStash[parseInt(p.slice(1), 10)];
+      return t ? T_MARK + JSON.stringify(t) : p;
+    });
+  }
+  /* Markdown → 纯文本：去掉标题 / 粗体 / 链接等标记，保留段落；表格整张保留结构（见上）。
      转换工具（如 OXR）导出的 MD 常带 HTML：<sup>/<sub> 是文献里的上标引用号和化学式下标，
-     先换成私用标记，渲染时再还原成真标签；其余 HTML 标签去掉只留文字，HTML 表格压平成分隔行。 */
+     先换成私用标记，渲染时再还原成真标签；其余 HTML 标签去掉只留文字。 */
   function mdToText(md) {
-    return md
+    tableStash = [];
+    var text = String(md == null ? "" : md)
       .replace(/```[\s\S]*?```/g, function (m) { return m.replace(/```/g, ""); })
       .replace(/<sup>([\s\S]*?)<\/sup>/gi, "\uE002$1\uE003")
-      .replace(/<sub>([\s\S]*?)<\/sub>/gi, "\uE004$1\uE005")
+      .replace(/<sub>([\s\S]*?)<\/sub>/gi, "\uE004$1\uE005");
+    /* HTML 表格：整张抽走（单元格里的 sup/sub 已在上面换成私用标记，cleanCell 不会动它们） */
+    text = text.replace(/<table\b[^>]*>([\s\S]*?)<\/table>/gi, function (m, body) {
+      var rows = [];
+      body.replace(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi, function (rm, rbody) {
+        var cells = [];
+        rbody.replace(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/gi, function (cm, c) { cells.push(cleanCell(c)); return cm; });
+        if (cells.length) rows.push(cells);
+        return rm;
+      });
+      if (!rows.length) return "\n\n";
+      return stashTable(rows[0], rows.slice(1));
+    });
+    /* Markdown 管道表格：表头行＋分隔行＋数据行，整组抽走；不成组的管道行仍走下面的旧压平兜底 */
+    var lines = text.split("\n"), kept = [], li = 0;
+    while (li < lines.length) {
+      if (/^\s*\|/.test(lines[li]) && li + 1 < lines.length && isMdSepRow(lines[li + 1])) {
+        var mHead = splitMdRow(lines[li]), mRows = [], lj = li + 2;
+        while (lj < lines.length && /^\s*\|/.test(lines[lj]) && !isMdSepRow(lines[lj])) { mRows.push(splitMdRow(lines[lj])); lj++; }
+        kept.push("", stashTable(mHead, mRows).trim(), "");
+        li = lj;
+      } else { kept.push(lines[li]); li++; }
+    }
+    return kept.join("\n")
       .replace(/<br\s*\/?>/gi, " ")
       .replace(/<\/tr\s*>/gi, "\n\n")
       .replace(/<tr[^>]*>/gi, "")
@@ -709,6 +768,22 @@
         if (im) html += '<figure class="doc-fig" data-pidx="' + pidx + '"><img data-zoom src="' + esc(im.src) + '" alt="' + esc(im.alt) + '">'
           + (im.alt ? "<figcaption>" + esc(im.alt) + "</figcaption>" : "") + "</figure>";
         return;
+      }
+      if (p.charAt(0) === T_MARK) {
+        var tbl = null;
+        try { tbl = JSON.parse(p.slice(1)); } catch (e) { tbl = null; }
+        if (tbl && tbl.head) {
+          var cellHtml = function (txt, tag) {
+            var cr = highlight(String(txt == null ? "" : txt));
+            count += cr.count;
+            return "<" + tag + ">" + restoreMarks(cr.html) + "</" + tag + ">";
+          };
+          html += '<div class="doc-table-wrap" data-pidx="' + pidx + '"><table class="doc-table"><thead><tr>'
+            + tbl.head.map(function (c) { return cellHtml(c, "th"); }).join("") + "</tr></thead><tbody>"
+            + (tbl.rows || []).map(function (row) { return "<tr>" + row.map(function (c) { return cellHtml(c, "td"); }).join("") + "</tr>"; }).join("")
+            + "</tbody></table></div>";
+          return;
+        }
       }
       var r = highlight(p);
       count += r.count;
@@ -851,6 +926,7 @@
     var pidx = +holder.getAttribute("data-pidx");
     var raw = doc.paras[pidx];
     if (raw == null) return;
+    if (raw.charAt(0) === T_MARK) { toast("表格里暂时不能插红字笔记，可以记在表格前后的段落里。"); return; }
     var range = null;
     if (document.caretRangeFromPoint) range = document.caretRangeFromPoint(e.clientX, e.clientY);
     else if (document.caretPositionFromPoint) {
@@ -941,7 +1017,7 @@
     }
     var truncated = raw.length > CONFIG.maxChars;
     if (truncated) raw = raw.slice(0, CONFIG.maxChars);
-    doc = { paras: toParagraphs(raw, opts.forceJoin), title: opts.title || "", origin: opts.origin || "", len: raw.length, imgs: imgs };
+    doc = { paras: expandTables(toParagraphs(raw, opts.forceJoin)), title: opts.title || "", origin: opts.origin || "", len: raw.length, imgs: imgs };
     doc.id = archiveIdFor(doc);
     archiveSave();
     renderDoc();
