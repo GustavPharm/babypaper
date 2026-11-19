@@ -752,17 +752,80 @@
     return weak >= 2;
   }
 
+  /* OCR 转换工具（OXR 等）把化学记法写成 LaTeX/mhchem 样子：$^{13}$C、$\delta$、$C{3}$、$\smiles{...}$。
+     渲染前把 $...$ 片段清洗成真上下标（走已有的私用标记）和希腊字母，否则 $ 和花括号会原样显示。
+     只处理带 \ ^ _ { 特征的片段，普通文字里的 $（价格等）不动；渲染时清洗，存档里的旧文献不用重新导入。 */
+  var CHEM_GREEK = { alpha: "α", beta: "β", gamma: "γ", delta: "δ", epsilon: "ε", zeta: "ζ", eta: "η", theta: "θ", kappa: "κ", lambda: "λ", mu: "µ", nu: "ν", xi: "ξ", pi: "π", rho: "ρ", sigma: "σ", tau: "τ", phi: "φ", chi: "χ", psi: "ψ", omega: "ω", Delta: "Δ", Gamma: "Γ", Sigma: "Σ", Lambda: "Λ", Pi: "Π", Phi: "Φ", Psi: "Ψ", Omega: "Ω", infty: "∞", approx: "≈", times: "×", cdot: "·", pm: "±", leq: "≤", geq: "≥", neq: "≠", rightarrow: "→", log: "log", ln: "ln", sin: "sin", cos: "cos", max: "max", min: "min" };
+  var SMILES_O = "\uE009", SMILES_C = "\uE00A";
+  function chemBrace(s, i) { /* s[i] 是 { 时取配对的 }，返回 {inner, end}；配不上返回 null */
+    var depth = 0;
+    for (var j = i; j < s.length; j++) {
+      if (s.charAt(j) === "{") depth++;
+      else if (s.charAt(j) === "}") { depth--; if (!depth) return { inner: s.slice(i + 1, j), end: j + 1 }; }
+    }
+    return null;
+  }
+  function chemSpan(inner) { /* 一个 $...$ 片段的内部文本 → 带私用标记的文本 */
+    var out = "", i = 0;
+    while (i < inner.length) {
+      var ch = inner.charAt(i);
+      if (ch === "\\") {
+        var m = /^\\(smiles|text|mathrm|mathbf|mathit|operatorname)\{/.exec(inner.slice(i));
+        if (m) {
+          var b = chemBrace(inner, i + m[0].length - 1);
+          if (b) {
+            if (m[1] === "smiles") out += SMILES_O + b.inner + SMILES_C;
+            else out += chemSpan(b.inner);
+            i = b.end; continue;
+          }
+        }
+        var g = /^\\([A-Za-z]+)/.exec(inner.slice(i));
+        if (g) { out += (CHEM_GREEK[g[1]] != null ? CHEM_GREEK[g[1]] : g[1]); i += g[0].length; continue; }
+        out += ch; i++; continue;
+      }
+      if (ch === "^" || ch === "_") {
+        var open = ch === "^" ? "\uE002" : "\uE004", close = ch === "^" ? "\uE003" : "\uE005";
+        if (inner.charAt(i + 1) === "{") {
+          var b2 = chemBrace(inner, i + 1);
+          if (b2) { out += open + b2.inner + close; i = b2.end; continue; }
+        }
+        if (i + 1 < inner.length) { out += open + inner.charAt(i + 1) + close; i += 2; continue; }
+        i++; continue;
+      }
+      if (ch === "{") { /* mhchem 写法：字母/数字/希腊字母后的 {n} 是下标，如 C{3}、H{2}O、\lambda{max} */
+        var prev = out.charAt(out.length - 1), b3 = chemBrace(inner, i);
+        if (b3 && /[A-Za-z0-9α-ωΑ-Ωµ\uE003\uE005]/.test(prev)) { out += "\uE004" + b3.inner + "\uE005"; i = b3.end; continue; }
+        if (b3) { out += b3.inner; i = b3.end; continue; }
+        out += ch; i++; continue;
+      }
+      out += ch; i++;
+    }
+    return out;
+  }
+  function chemClean(text) {
+    if (!text || text.indexOf("$") < 0) return text;
+    return text.replace(/\$([^$]{1,300})\$/g, function (whole, inner) {
+      if (/[\\^_{]/.test(inner)) return chemSpan(inner);
+      /* 无空格的短片段里带字母的也是记号（如 $J$）；纯数字的 $5$ 是价钱，不动 */
+      if (inner.length <= 40 && !/\s/.test(inner) && /[A-Za-z]/.test(inner) && /^[A-Za-z0-9.,'+\-=<>()]+$/.test(inner)) return chemSpan(inner);
+      /* 表格里的数值和撇号记号：$0.33±0.11$、$3'$ 这类也去掉 $ 壳（纯整数仍按价钱保护） */
+      if (inner.length <= 40 && !/\s/.test(inner) && (/^[\d']+$/.test(inner) && inner.indexOf("'") >= 0 || /^[\d][\d.,±+\-=%]*$/.test(inner) && /[±.,]/.test(inner))) return chemSpan(inner);
+      return whole;
+    });
+  }
+
   /* mdToText 把 <sup>/<sub> 换成的私用标记，在文本转义之后还原成真标签 */
   function restoreMarks(html) {
     return html.replace(/\uE002/g, "<sup>").replace(/\uE003/g, "</sup>")
       .replace(/\uE004/g, "<sub>").replace(/\uE005/g, "</sub>")
-      .replace(/\uE006/g, '<span class="my-note">').replace(/\uE007/g, "</span>");
+      .replace(/\uE006/g, '<span class="my-note">').replace(/\uE007/g, "</span>")
+      .replace(/\uE009/g, '<code class="smiles-code">').replace(/\uE00A/g, "</code>");
   }
   /* 按当前的标词规则把 doc 画进阅读区；「已掌握」变了以后会再调一次 */
   function renderDoc() {
-    var count = 0, html = doc.title ? "<h2>" + esc(doc.title) + "</h2>" : "";
+    var count = 0, html = doc.title ? "<h2>" + restoreMarks(esc(chemClean(doc.title))) + "</h2>" : "";
     doc.paras.forEach(function (p, pidx) {
-      if (p.charAt(0) === H_MARK) { html += '<h3 data-pidx="' + pidx + '">' + restoreMarks(esc(p.slice(1))) + "</h3>"; return; }
+      if (p.charAt(0) === H_MARK) { html += '<h3 data-pidx="' + pidx + '">' + restoreMarks(esc(chemClean(p.slice(1)))) + "</h3>"; return; }
       if (p.charAt(0) === IMG_MARK) {
         var im = (doc.imgs || [])[parseInt(p.slice(1), 10)];
         if (im) html += '<figure class="doc-fig" data-pidx="' + pidx + '"><img data-zoom src="' + esc(im.src) + '" alt="' + esc(im.alt) + '">'
@@ -774,7 +837,7 @@
         try { tbl = JSON.parse(p.slice(1)); } catch (e) { tbl = null; }
         if (tbl && tbl.head) {
           var cellHtml = function (txt, tag) {
-            var cr = highlight(String(txt == null ? "" : txt));
+            var cr = highlight(chemClean(String(txt == null ? "" : txt)));
             count += cr.count;
             return "<" + tag + ">" + restoreMarks(cr.html) + "</" + tag + ">";
           };
@@ -785,7 +848,7 @@
           return;
         }
       }
-      var r = highlight(p);
+      var r = highlight(chemClean(p));
       count += r.count;
       html += '<p data-pidx="' + pidx + '">' + restoreMarks(r.html) + "</p>";
     });
